@@ -1,0 +1,43 @@
+diff -Naur broadcom-wl.old/src/wl/sys/wl_iw.c broadcom-wl/src/wl/sys/wl_iw.c
+--- broadcom-wl.old/src/wl/sys/wl_iw.c	2008-12-22 14:08:06.000000000 +0000
++++ broadcom-wl/src/wl/sys/wl_iw.c	2008-12-22 14:11:18.000000000 +0000
+@@ -124,7 +124,7 @@
+ 	return ret;
+ }
+ 
+-static int
++int
+ dev_wlc_intvar_set(
+ 	struct net_device *dev,
+ 	char *name,
+diff -Naur broadcom-wl.old/src/wl/sys/wl_linux.c broadcom-wl/src/wl/sys/wl_linux.c
+--- broadcom-wl.old/src/wl/sys/wl_linux.c	2008-12-05 19:46:08.000000000 +0000
++++ broadcom-wl/src/wl/sys/wl_linux.c	2008-12-22 14:17:13.000000000 +0000
+@@ -246,6 +246,8 @@
+ };
+ MODULE_DEVICE_TABLE(pci, wl_id_table);
+ 
++MODULE_LICENSE("MIXED/Proprietary");
++
+ #ifdef BCMDBG
+ static int msglevel = 0xdeadbeef;
+ module_param(msglevel, int, 0);
+@@ -288,6 +290,8 @@
+ #endif 
+ #endif 
+ }
++
++extern int dev_wlc_intvar_set(struct net_device *dev, char *name, int val);
+ 
+ static wl_info_t *
+ wl_attach(uint16 vendor, uint16 device, ulong regs, uint bustype, void *btparam, uint irq)
+@@ -439,6 +443,9 @@
+ 	printf("%s: Broadcom BCM%04x 802.11 Wireless Controller " EPI_VERSION_STR,
+ 		dev->name, device);
+ 
++	/* Work around. Default vlan_mode to off */
++	wlc_iovar_setint(wl->wlc, "vlan_mode", OFF);
++
+ #ifdef BCMDBG
+ 	printf(" (Compiled in " SRCBASE " at " __TIME__ " on " __DATE__ ")");
+ #endif 
