@@ -3,7 +3,7 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-#%define buildforkernels newest
+%define buildforkernels akmod
 
 Name:		wl-kmod
 Version:	5.10.27.11
@@ -77,7 +77,7 @@ for kernel_version in %{?kernel_versions}; do
  popd
 done
 
-chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*
+chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %clean
