@@ -6,17 +6,15 @@
 #%define buildforkernels newest
 
 Name:		wl-kmod
-Version:	5.10.27.11
+Version:	5.10.27.12
 Release:	1%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
 URL:		http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-32_5_10_27_11.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-64_5_10_27_11.tar.gz
+Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-32_5_10_27_12.tar.gz
+Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-64_5_10_27_12.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:		broadcom-wl-5.10.27.11-kernel-2.6.27.patch
-Patch1:		broadcom-wl-5.10.27.11-vlanmode.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -53,8 +51,6 @@ pushd %{name}-%{version}-src
 %else
  tar xzf %{SOURCE1}
 %endif
-%patch0 -p1 -b .iwestream
-%patch1 -p1 -b .vlanmode
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -84,6 +80,10 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Jan 04 2009 Chris Nolan <chris@cenolan.com> - 5.10.27.12-1
+- Update version to 5.10.27.12
+- Remove vlanmode and build patches
+
 * Wed Dec 31 2008 Chris Nolan <chris@cenolan.com> 5.10.27.11-1
 - Update version to 5.10.27.11
 
