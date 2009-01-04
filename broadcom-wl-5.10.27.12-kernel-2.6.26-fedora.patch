@@ -1,0 +1,12 @@
+diff -Naur wl-kmod.old/src/wl/sys/wl_iw.h wl-kmod/src/wl/sys/wl_iw.h
+--- wl-kmod.old/src/wl/sys/wl_iw.h	2008-12-17 20:56:07.000000000 +0000
++++ wl-kmod/src/wl/sys/wl_iw.h	2009-01-04 16:26:17.000000000 +0000
+@@ -66,7 +66,7 @@
+ extern void wl_iw_event(struct net_device *dev, wl_event_msg_t *e, void* data);
+ extern int wl_iw_get_wireless_stats(struct net_device *dev, struct iw_statistics *wstats);
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26)
+ #define IWE_STREAM_ADD_EVENT(info, stream, ends, iwe, extra) \
+ 	iwe_stream_add_event(info, stream, ends, iwe, extra)
+ #define IWE_STREAM_ADD_VALUE(info, event, value, ends, iwe, event_len) \
