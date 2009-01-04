@@ -17,6 +17,7 @@ Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-64_5_10_27_11
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:		broadcom-wl-5.10.27.11-kernel-2.6.27.patch
 Patch1:		broadcom-wl-5.10.27.11-vlanmode.patch
+Patch2:		broadcom-wl-5.10.27.11-kernel-2.6.29.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -55,6 +56,7 @@ pushd %{name}-%{version}-src
 %endif
 %patch0 -p1 -b .iwestream
 %patch1 -p1 -b .vlanmode
+%patch2 -p1 -b .lib80211
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -84,6 +86,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Jan 04 2009 Chris Nolan <chris@cenolan.com> - 5.10.27.11-1.2
+- added patch for building on 2.6.29 kernel
+
 * Sun Jan 04 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.27.11-1.1
 - rebuild for latest Fedora kernel;
 
