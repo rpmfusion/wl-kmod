@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.27.12
-Release:	1%{?dist}.2
+Release:	1%{?dist}.3
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -80,6 +80,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Jan 25 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.27.12-1.3
+- rebuild for latest Fedora kernel;
+
 * Sun Jan 18 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.27.12-1.2
 - rebuild for latest Fedora kernel;
 
