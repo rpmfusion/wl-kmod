@@ -12,8 +12,8 @@ Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
 URL:		http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-32_5_10_27_12.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86-64_5_10_27_12.tar.gz
+Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5_10_27_14.tar.gz
+Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5_10_27_14.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:		broadcom-wl-5.10.27.14-linux-2.6.29.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
