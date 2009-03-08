@@ -1,6 +1,6 @@
-diff -u -r a/src/wl/sys/wl_iw.c b/src/wl/sys/wl_iw.c
---- a/src/wl/sys/wl_iw.c	2009-01-19 23:02:56.000000000 +0100
-+++ b/src/wl/sys/wl_iw.c	2009-01-24 12:33:59.810703840 +0100
+diff -u -r 5.10.79.10.orig/src/wl/sys/wl_iw.c 5.10.79.10/src/wl/sys/wl_iw.c
+--- 5.10.79.10.orig/src/wl/sys/wl_iw.c	2009-03-08 20:19:07.000000000 +0000
++++ 5.10.79.10/src/wl/sys/wl_iw.c	2009-03-08 20:19:23.000000000 +0000
 @@ -610,7 +610,11 @@
  	char *extra
  )
@@ -73,9 +73,9 @@ diff -u -r a/src/wl/sys/wl_iw.c b/src/wl/sys/wl_iw.c
  
  	WL_TRACE(("%s: SIOCGIWAUTH\n", dev->name));
  
-diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
---- a/src/wl/sys/wl_linux.c	2009-01-19 23:03:09.000000000 +0100
-+++ b/src/wl/sys/wl_linux.c	2009-01-24 13:55:13.397012940 +0100
+diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.c
+--- 5.10.79.10.orig/src/wl/sys/wl_linux.c	2009-03-08 20:19:07.000000000 +0000
++++ 5.10.79.10/src/wl/sys/wl_linux.c	2009-03-08 20:19:23.000000000 +0000
 @@ -53,6 +53,9 @@
  #include <linux/pci_ids.h>
  #define WLC_MAXBSSCFG		1	
@@ -98,7 +98,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  	struct ieee80211_tkip_data  *tkip_ucast_data;
  	struct ieee80211_tkip_data  *tkip_bcast_data;
  #endif
-@@ -190,7 +197,11 @@
+@@ -201,7 +208,11 @@
  
  static int wl_found = 0;
  
@@ -110,7 +110,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  #define	WL_INFO(dev)		((wl_info_t*)(WL_DEV_IF(dev)->wl))	
  
  #define WL_LOCK(wl)	spin_lock_bh(&(wl)->lock)
-@@ -350,6 +361,9 @@
+@@ -363,6 +374,9 @@
  	dev = wlif->dev;
  	wl->dev = dev;
  	wl_if_setup(dev);
@@ -120,7 +120,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  
  	dev->base_addr = regs;
  
-@@ -423,10 +437,19 @@
+@@ -436,10 +450,19 @@
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14)
  
@@ -140,7 +140,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  	}
  #endif 
  #ifdef CONFIG_WIRELESS_EXT
-@@ -725,7 +748,11 @@
+@@ -744,7 +767,11 @@
  	}
  
  	if (wl->monitor) {
@@ -152,7 +152,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  		wl->monitor = NULL;
  	}
  
-@@ -895,6 +922,9 @@
+@@ -913,6 +940,9 @@
  #else
  
  	dev = alloc_netdev(0, name, ether_setup);
@@ -162,7 +162,7 @@ diff -u -r a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  	if (!dev) {
  		MFREE(wl->osh, wlif, sizeof(wl_if_t));
  		WL_ERROR(("wl%d: wl_alloc_if: out of memory, alloc_netdev\n",
-@@ -908,7 +938,9 @@
+@@ -926,7 +956,9 @@
  	wlif->wl = wl;
  	wlif->wlcif = wlcif;
  	wlif->subunit = subunit;
