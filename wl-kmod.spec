@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.79.10
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -15,7 +15,7 @@ URL:		http://www.broadcom.com/support/802.11/linux_sta.php
 Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5_10_79_10.tar.gz
 Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5_10_79_10.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:		broadcom-wl-5.10.79.10-linux-2.6.29.patch
+Patch0:		broadcom-wl-5.10.79.10-linux-2.6.29a.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -82,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Mar 28 2009 Chris Nolan <chris@cenolan.com> - 5.10.79.10-2
+- repatched to load lib80211_crypt_tkip module - bug #466
+
 * Sun Mar 08 2009 Chris Nolan <chris@cenolan.com> - 5.10.79.10-1
 - update version to 5.10.79.10
 
