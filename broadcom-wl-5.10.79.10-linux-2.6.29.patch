@@ -1,6 +1,6 @@
-diff -u -r 5.10.79.10.orig/src/wl/sys/wl_iw.c 5.10.79.10/src/wl/sys/wl_iw.c
---- 5.10.79.10.orig/src/wl/sys/wl_iw.c	2009-03-08 20:19:07.000000000 +0000
-+++ 5.10.79.10/src/wl/sys/wl_iw.c	2009-03-08 20:19:23.000000000 +0000
+diff -u -r hybrid-portsrc-x86_32-v5_10_79_10.orig/src/wl/sys/wl_iw.c hybrid-portsrc-x86_32-v5_10_79_10/src/wl/sys/wl_iw.c
+--- hybrid-portsrc-x86_32-v5_10_79_10.orig/src/wl/sys/wl_iw.c	2009-02-09 21:43:18.000000000 +0000
++++ hybrid-portsrc-x86_32-v5_10_79_10/src/wl/sys/wl_iw.c	2009-03-28 17:51:03.000000000 +0000
 @@ -610,7 +610,11 @@
  	char *extra
  )
@@ -73,9 +73,9 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_iw.c 5.10.79.10/src/wl/sys/wl_iw.c
  
  	WL_TRACE(("%s: SIOCGIWAUTH\n", dev->name));
  
-diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.c
---- 5.10.79.10.orig/src/wl/sys/wl_linux.c	2009-03-08 20:19:07.000000000 +0000
-+++ 5.10.79.10/src/wl/sys/wl_linux.c	2009-03-08 20:19:23.000000000 +0000
+diff -u -r hybrid-portsrc-x86_32-v5_10_79_10.orig/src/wl/sys/wl_linux.c hybrid-portsrc-x86_32-v5_10_79_10/src/wl/sys/wl_linux.c
+--- hybrid-portsrc-x86_32-v5_10_79_10.orig/src/wl/sys/wl_linux.c	2009-02-09 21:43:32.000000000 +0000
++++ hybrid-portsrc-x86_32-v5_10_79_10/src/wl/sys/wl_linux.c	2009-03-28 18:08:39.000000000 +0000
 @@ -53,6 +53,9 @@
  #include <linux/pci_ids.h>
  #define WLC_MAXBSSCFG		1	
@@ -120,7 +120,7 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.
  
  	dev->base_addr = regs;
  
-@@ -436,10 +450,19 @@
+@@ -436,10 +450,20 @@
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14)
  
@@ -132,6 +132,7 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.
  	if (wl->tkipmodops == NULL) {
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
 +		request_module("lib80211");
++		request_module("lib80211_crypt_tkip");
 +		wl->tkipmodops = lib80211_get_crypto_ops("TKIP");
 +#else
  		request_module("ieee80211_crypt_tkip");
@@ -140,7 +141,7 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.
  	}
  #endif 
  #ifdef CONFIG_WIRELESS_EXT
-@@ -744,7 +767,11 @@
+@@ -744,7 +768,11 @@
  	}
  
  	if (wl->monitor) {
@@ -152,7 +153,7 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.
  		wl->monitor = NULL;
  	}
  
-@@ -913,6 +940,9 @@
+@@ -913,6 +941,9 @@
  #else
  
  	dev = alloc_netdev(0, name, ether_setup);
@@ -162,7 +163,7 @@ diff -u -r 5.10.79.10.orig/src/wl/sys/wl_linux.c 5.10.79.10/src/wl/sys/wl_linux.
  	if (!dev) {
  		MFREE(wl->osh, wlif, sizeof(wl_if_t));
  		WL_ERROR(("wl%d: wl_alloc_if: out of memory, alloc_netdev\n",
-@@ -926,7 +956,9 @@
+@@ -926,7 +957,9 @@
  	wlif->wl = wl;
  	wlif->wlcif = wlcif;
  	wlif->subunit = subunit;
