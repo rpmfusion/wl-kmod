@@ -15,7 +15,7 @@ URL:		http://www.broadcom.com/support/802.11/linux_sta.php
 Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5_10_79_10.tar.gz
 Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5_10_79_10.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:		broadcom-wl-5.10.79.10-linux-2.6.29a.patch
+Patch0:		broadcom-wl-5.10.79.10-linux-2.6.29.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
