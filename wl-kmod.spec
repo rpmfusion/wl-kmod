@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.79.10
-Release:	2%{?dist}
+Release:	2%{?dist}.1
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -82,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Apr 05 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.79.10-2.1
+- rebuild for new kernels
+
 * Sat Mar 28 2009 Chris Nolan <chris@cenolan.com> - 5.10.79.10-2
 - repatched to load lib80211_crypt_tkip module - bug #466
 
