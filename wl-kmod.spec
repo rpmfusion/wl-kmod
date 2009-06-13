@@ -7,13 +7,13 @@
 
 Name:		wl-kmod
 Version:	5.10.91.9
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
 URL:		http://www.broadcom.com/support/802.11/linux_sta.php
 Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5_10_91_9.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5_10_91_9.tar.gz
+Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5_10_91_9.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:		broadcom-wl-5.10.91.9-linux-2.6.29.patch
 Patch1:		broadcom-wl-5.10.91.9-license.patch
@@ -84,6 +84,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Jun 13 2009 Chris Nolan <chris@cenolan.com> - 5.10.91.9-3
+- fixed a typo in the spec file
+
 * Sat Jun 13 2009 Chris Nolan <chris@cenolan.com> - 5.10.91.9-2
 - added license patch
 
