@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.91.9
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -54,7 +54,7 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0 -p1 -b .kernelfix
-%patch0 -p1 -b .license
+%patch1 -p1 -b .license
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -84,6 +84,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Jun 13 2009 Chris Nolan <chris@cenolan.com> - 5.10.91.9-2
+- fixed a typo in spec file
+
 * Sat Jun 13 2009 Chris Nolan <chris@cenolan.com> - 5.10.91.9-1
 - update version to 5.10.91.9
 
