@@ -1,0 +1,11 @@
+diff -Nru a/wl_linux.c b/wl_linux.c
+--- a/wl_linux.c	2009-05-02 08:03:54.000000000 +0400
++++ b/wl_linux.c	2009-05-02 08:05:36.000000000 +0400
+@@ -190,6 +190,7 @@
+ 	{ 0 }
+ };
+ MODULE_DEVICE_TABLE(pci, wl_id_table);
++MODULE_LICENSE("Mixed/Proprietary");
+ 
+ #ifdef BCMDBG
+ static int msglevel = 0xdeadbeef;
