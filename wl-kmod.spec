@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.91.9.3
-Release:	3%{?dist}.6
+Release:	3%{?dist}.7
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -21,7 +21,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	%{_bindir}/kmodtool
 
 # needed for plague to make sure it builds for i586 and i686
-ExclusiveArch:  i586 i686 x86_64
+ExclusiveArch:  i686 x86_64
 # ppc disabled because broadcom only provides x86 and x86_64 bits
 
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -82,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Nov 22 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.91.9.3-3.7
+- rebuild for new kernel, disable i586 builds
+
 * Tue Nov 10 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.91.9.3-3.6
 - rebuild for F12 release kernel
 
