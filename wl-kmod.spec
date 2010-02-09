@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.10.91.9.3
-Release:	3%{?dist}.7
+Release:	4%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -16,6 +16,7 @@ Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5.10.91.9
 Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5.10.91.9.3.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:         broadcom-wl-5.10.91.9.3-license.patch
+Patch1:		broadcom-wl-5.10.91.9.3-linux-2.6.32.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -53,6 +54,7 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0 -p1 -b .license
+%patch1 -p1 -b .kernelfix
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -82,6 +84,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Feb 09 2010 Chris Nolan <chris@cenolan.com> - 5.10.91.9.3-4
+- added patch for linux kernel 2.6.32
+
 * Sun Nov 22 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.10.91.9.3-3.7
 - rebuild for new kernel, disable i586 builds
 
