@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.60.48.36
-Release:	1%{?dist}.3
+Release:	1%{?dist}.4
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -82,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Mar 29 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.60.48.36-1.4
+- rebuild for new kernel
+
 * Fri Mar 05 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.60.48.36-1.3
 - rebuild for new kernel
 
