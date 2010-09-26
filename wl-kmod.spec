@@ -55,8 +55,8 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0 -p1 -b .license
-%patch1 -p1 -b .kernel
-%patch2 -p1 -b .multicast
+%patch1 -p0 -b .kernel
+%patch2 -p0 -b .multicast
 popd
 
 for kernel_version in %{?kernel_versions} ; do
