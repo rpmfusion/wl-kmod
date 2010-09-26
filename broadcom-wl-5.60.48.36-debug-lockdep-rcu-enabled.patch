@@ -1,0 +1,15 @@
+diff -u --recursive src/wl/sys/wl_linux.c a/src/wl/sys/wl_linux.c
+--- src/wl/sys/wl_linux.c	2010-08-05 03:19:31.168558378 -0500
++++ src/wl/sys/wl_linux.c	2010-08-05 03:12:35.987557321 -0500
+@@ -249,6 +249,11 @@
+ 
+ }
+ 
++int debug_lockdep_rcu_enabled(void)
++{
++	return 1;
++}
++
+ static wl_info_t *
+ wl_attach(uint16 vendor, uint16 device, ulong regs, uint bustype, void *btparam, uint irq)
+ {

@@ -18,6 +18,7 @@ Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:         broadcom-wl-5.60.48.36-license.patch
 Patch1:		broadcom-wl-5.60.48.36-2.6.33-kernel.patch
 Patch2:		broadcom-wl-5.60.48.36-multicast-kernel.patch
+Patch3:		broadcom-wl-5.60.48.36-debug-lockdep-rcu-enabled.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -57,6 +58,7 @@ pushd %{name}-%{version}-src
 %patch0 -p1 -b .license
 %patch1 -p0 -b .kernel
 %patch2 -p0 -b .multicast
+%patch3 -p0 -b .lockdep
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -89,6 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sun Sep 26 2010 Chris Nolan <chris@cenolan.com> - 5.60.48.36-2
 - added patch for kernel > 2.6.33
 - added multicast kernel patch
+- added bogus debug_lockdep_rcu_enabled patch
 
 * Mon Feb 22 2010 Chris Nolan <chris@cenolan.com> - 5.60.48.36-1
 - Updated version to 5.60.48.36
