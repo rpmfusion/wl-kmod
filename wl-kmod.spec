@@ -17,7 +17,6 @@ Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5.60.48.3
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:         broadcom-wl-5.60.48.36-license.patch
 Patch1:		broadcom-wl-5.60.48.36-2.6.33-kernel.patch
-Patch2:		broadcom-wl-5.60.48.36-multicast-kernel.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -56,7 +55,6 @@ pushd %{name}-%{version}-src
 %endif
 %patch0 -p1 -b .license
 %patch1 -p0 -b .kernel
-%patch2 -p0 -b .multicast
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -88,7 +86,6 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sun Sep 26 2010 Chris Nolan <chris@cenolan.com> - 5.60.48.36-2
 - added 2.6.33 kernel patch
-- added multicast patch
 
 * Sun Sep 19 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.60.48.36-1.18
 - rebuild for new kernel
