@@ -3,22 +3,19 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%define buildforkernels newest
+#define buildforkernels newest
 
 Name:		wl-kmod
-Version:	5.60.48.36
-Release:	2%{?dist}.7
+Version:	5.100.82.38
+Release:	1%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
 URL:		http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5.60.48.36.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5.60.48.36.tar.gz
+Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_32-v5_100_82_38.tar.gz
+Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_38.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:         broadcom-wl-5.60.48.36-license.patch
-Patch1:		broadcom-wl-5.60.48.36-2.6.33-kernel.patch
-Patch2:		broadcom-wl-5.60.48.36-multicast-kernel.patch
-Patch3:		broadcom-wl-5.60.48.36-debug-lockdep-rcu-enabled.patch
+Patch0:         broadcom-wl-5.100.82.38-license.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -56,9 +53,6 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0 -p1 -b .license
-%patch1 -p0 -b .kernel
-%patch2 -p0 -b .multicast
-%patch3 -p0 -b .lockdep
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -88,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Feb 01 2011 Chris Nolan <chris@cenolan.com> - 5.100.82.38
+- updated version to 5.100.82.38
+
 * Fri Dec 24 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.60.48.36-2.7
 - rebuild for updated kernel
 
