@@ -6,16 +6,16 @@
 #define buildforkernels newest
 
 Name:		wl-kmod
-Version:	5.60.48.36
-Release:	1%{?dist}.18
+Version:	5.100.82.38
+Release:	1%{?dist}
 Summary:	Kernel module for broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
 URL:		http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_32-v5.60.48.36.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc-x86_64-v5.60.48.36.tar.gz
+Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_32-v5_100_82_38.tar.gz
+Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_38.tar.gz
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:         broadcom-wl-5.60.48.36-license.patch
+Patch0:         broadcom-wl-5.100.82.38-license.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	%{_bindir}/kmodtool
@@ -82,6 +82,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Feb 01 2011 Chris Nolan <chris@cenolan.com> - 5.100.82.38
+- updated version to 5.100.82.38
+
 * Thu Dec 02 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 5.60.48.36-1.18
 - rebuild for F-12 kernel
 
