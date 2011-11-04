@@ -1,0 +1,12 @@
+diff -Naur --recursive hybrid-portsrc_x86_32-v5_100_82_38.orig/src/wl/sys/wl_linux.c hybrid-portsrc_x86_32-v5_100_82_38/src/wl/sys/wl_linux.c 
+--- hybrid-portsrc_x86_32-v5_100_82_38.orig/src/wl/sys/wl_linux.c	2010-12-15 01:58:07.000000000 +0000
++++ hybrid-portsrc_x86_32-v5_100_82_38/src/wl/sys/wl_linux.c	2011-01-27 22:33:05.899146588 +0000
+@@ -180,6 +180,8 @@
+ static void wl_report_radio_state(wl_info_t *wl);
+ #endif
+ 
++MODULE_LICENSE("MIXED/Proprietary");
++
+ static struct pci_device_id wl_id_table[] = {
+ 	{ PCI_VENDOR_ID_BROADCOM, 0x4311, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 }, 
+ 	{ PCI_VENDOR_ID_BROADCOM, 0x4312, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 }, 
