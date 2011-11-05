@@ -1,0 +1,23 @@
+#
+# Patch for Broadcom 80211 (STA) driver 5.100.82.38
+# Fixes the 'init_MUTEX' compile problem seen on newer (> 2.6.37) kernels.
+# If you were able to compile, you don't need this patch.
+# To apply:
+#    cd to the top level of the driver source. ('ls' should show at least src, lib, Makefile)
+#    patch -p0 < this_file
+#    make
+#
+
+--- src/wl/sys/wl_linux.c	2011-05-20 12:07:25.303356739 -0700
++++ src/wl/sys/wl_linux.c.new	2011-05-20 12:07:13.663356735 -0700
+@@ -481,9 +481,9 @@
+ 	if (WL_ALL_PASSIVE_ENAB(wl)) {
+ #ifdef WL_ALL_PASSIVE
+ 		spin_lock_init(&wl->txq_lock);
+ #endif 
+-		init_MUTEX(&wl->sem);
++		sema_init(&wl->sem, 1);
+ 	}
+ 
+ 	if (!(wl->wlc = wlc_attach((void *) wl, vendor, device, unit, wl->piomode,
+ 		osh, wl->regsva, wl->bcm_bustype, btparam, &err))) {
