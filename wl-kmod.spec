@@ -4,12 +4,12 @@
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
 %define buildforkernels newest
-%define buildforkernels current
-#define buildforkernels akmods
+%define buildforkernels newest
+%define buildforkernels newest
 
 Name:		wl-kmod
 Version:	5.100.82.38
-Release:	1%{?dist}.5
+Release:	1%{?dist}.6
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -85,6 +85,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*/* ||
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Dec 17 2011 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.38-1.6
+- rebuild for updated kernel
+
 * Tue Dec 13 2011 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.38-1.5
 - rebuild for updated kernel
 
