@@ -9,7 +9,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	1%{?dist}.10
+Release:	1%{?dist}.11
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -85,6 +85,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*/* ||
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Mar 18 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-1.11
+- rebuild for updated kernel
+
 * Thu Mar 08 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-1.10
 - rebuild for updated kernel
 
