@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	2%{?dist}.1
+Release:	3%{?dist}
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -17,6 +17,7 @@ Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_
 Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:		broadcom-wl-5.100.82.112-license.patch
 Patch1:		broadcom-wl-5.100.82.112-kernel-3.2.patch
+Patch2:		broadcom-wl-5.100.82.112-kernel-3.4.patch
 
 BuildRequires:	%{_bindir}/kmodtool
 
@@ -54,6 +55,7 @@ pushd %{name}-%{version}-src
 %endif
 %patch0 -p1 -b .license
 %patch1 -p1 -b .kernel-3.2
+%patch2 -p1 -b .kernel-3.4
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -83,6 +85,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*/* ||
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Fri Jun 08 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3
+- Added patch to build for kernel >= 3.4
+
 * Thu Apr 19 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-2.1
 - Rebuilt for Rawhide
 
