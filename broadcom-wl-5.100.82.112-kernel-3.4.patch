@@ -1,0 +1,13 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c	2012-01-09 15:07:19.779120052 +0100
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c	2012-06-08 19:33:56.732583669 +0200
+@@ -40,7 +40,9 @@
+ #include <linux/pci_ids.h>
+ #define WLC_MAXBSSCFG		1	
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 4, 0)
+ #include <asm/system.h>
++#endif
+ #include <asm/io.h>
+ #include <asm/irq.h>
+ #include <asm/pgtable.h>
