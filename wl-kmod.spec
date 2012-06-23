@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	3%{?dist}.2
+Release:	3%{?dist}.3
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -73,18 +73,21 @@ done
 rm -rf ${RPM_BUILD_ROOT}
 for kernel_version in %{?kernel_versions}; do
  pushd _kmod_build_${kernel_version%%___*}
- mkdir -p ${RPM_BUILD_ROOT}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
- install -m 755 *.ko ${RPM_BUILD_ROOT}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
+ mkdir -p ${RPM_BUILD_ROOT}%{kmodinstdir_prefix}${kernel_version%%___*}%{kmodinstdir_postfix}
+ install -m 0755 *.ko ${RPM_BUILD_ROOT}%{kmodinstdir_prefix}${kernel_version%%___*}%{kmodinstdir_postfix}
  popd
 done
 
-chmod 0755 $RPM_BUILD_ROOT/%{kmodinstdir_prefix}/*/%{kmodinstdir_postfix}/*/* || :
+chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Jun 23 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3.3
+- spec file cleanup
+
 * Thu Jun 21 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.2
 - Rebuilt for updated kernel
 
