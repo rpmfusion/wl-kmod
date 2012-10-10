@@ -1,0 +1,28 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/Makefile hybrid-portsrc_x86_32-v5_100_82_112/Makefile
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/Makefile	2011-10-22 18:56:55.000000000 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/Makefile	2012-10-10 14:34:17.019295870 +0200
+@@ -16,18 +16,18 @@
+ ifneq ($(KERNELRELEASE),)
+ 
+   LINUXVER_GOODFOR_CFG80211:=$(strip $(shell \
+-    if [ "$(VERSION)" -ge "2" -a "$(PATCHLEVEL)" -ge "6" -a "$(SUBLEVEL)" -ge "32" ]; then \
+-      echo TRUE; \
+-    else \
++    if [ "$(VERSION)" -le "2" -a "$(PATCHLEVEL)" -le "6" -a "$(SUBLEVEL)" -lt "32" ]; then \
+       echo FALSE; \
++    else \
++      echo TRUE; \
+     fi \
+   ))
+ 
+     LINUXVER_WEXT_ONLY:=$(strip $(shell \
+-    if [ "$(VERSION)" -ge "2" -a "$(PATCHLEVEL)" -ge "6" -a "$(SUBLEVEL)" -ge "17" ]; then \
+-      echo FALSE; \
+-    else \
++    if [ "$(VERSION)" -le "2" -a "$(PATCHLEVEL)" -le "6" -a "$(SUBLEVEL)" -lt "17" ]; then \
+       echo TRUE; \
++    else \
++      echo FALSE; \
+     fi \
+   ))
+ 
