@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	4%{?dist}
+Release:	4%{?dist}.1
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -87,6 +87,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Oct 11 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-4.1
+- Rebuilt for updated kernel
+
 * Wed Oct 10 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4
 - Added patch to build with CFG80211 API as default for F-17
 
