@@ -1,0 +1,32 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c	2011-10-22 18:56:55.000000000 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2012-10-16 14:30:42.882619819 +0200
+@@ -42,7 +42,11 @@
+            enum nl80211_iftype type, u32 *flags, struct vif_params *params);
+ static s32 __wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
+            struct cfg80211_scan_request *request, struct cfg80211_ssid *this_ssid);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
++static s32 wl_cfg80211_scan(struct wiphy *wiphy, 
++#else
+ static s32 wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
++#endif
+            struct cfg80211_scan_request *request);
+ static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, u32 changed);
+ static s32 wl_cfg80211_join_ibss(struct wiphy *wiphy, struct net_device *dev,
+@@ -570,10 +574,16 @@
+ }
+ 
+ static s32
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
++wl_cfg80211_scan(struct wiphy *wiphy,
++#else
+ wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
++#endif
+                  struct cfg80211_scan_request *request)
+ {
+ 	s32 err = 0;
++	struct wl_priv *wl = wiphy_to_wl(wiphy);
++	struct net_device *ndev = wl_to_ndev(wl);
+ 
+ 	CHECK_SYS_UP();
+ 	err = __wl_cfg80211_scan(wiphy, ndev, request, NULL);
