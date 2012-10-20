@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	5%{?dist}.1
+Release:	6%{?dist}
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -20,6 +20,8 @@ Patch1:		broadcom-wl-5.100.82.112-kernel-3.2.patch
 Patch2:		broadcom-wl-5.100.82.112-kernel-3.4.patch
 Patch3:		broadcom-wl-5.100.82.112-cfg80211.patch
 Patch4:		broadcom-wl-5.100.82.112-kernel-3.6.patch
+Patch5:		broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
+Patch6:		broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
 
 BuildRequires:	%{_bindir}/kmodtool
 
@@ -60,6 +62,8 @@ pushd %{name}-%{version}-src
 %patch2 -p1 -b .kernel-3.4
 %patch3 -p1 -b .cfg80211
 %patch4 -p1 -b .kernel-3.6
+%patch5 -p1 -b .recent_kernel_semaphore
+%patch6 -p1 -b .recent_kernel_ioctl
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -89,6 +93,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Oct 20 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-6
+- Added patch to include semaphore.h in wl_iw.h
+- Added patch from Archlinux to disable too many "ERROR @wl_cfg80211_get_station..." messages
+  in /var/log/messages since activation of CFG80211 API
+
 * Wed Oct 17 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5.1
 - Cleaned up patch for kernel >= 3.6
 
