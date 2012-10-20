@@ -1,0 +1,31 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c	2012-10-16 22:04:18.718673254 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2012-10-20 16:16:20.071738204 +0200
+@@ -1478,7 +1478,10 @@
+ 		scb_val.val = 0;
+ 		err = wl_dev_ioctl(dev, WLC_GET_RSSI, &scb_val, sizeof(scb_val_t));
+ 		if (err) {
+-			WL_ERR(("Could not get rssi (%d)\n", err));
++			if (err != -EINVAL) {
++				// Don't fill syslog with EINVAL error
++				WL_ERR(("Could not get rssi (%d)\n", err));
++			}
+ 			return err;
+ 		}
+ 		rssi = dtoh32(scb_val.val);
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c	2012-10-16 14:26:28.087617125 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c	2012-10-20 16:16:20.447738352 +0200
+@@ -1587,11 +1587,7 @@
+ 	}
+ 
+ 	WL_LOCK(wl);
+-	if (!capable(CAP_NET_ADMIN)) {
+-		bcmerror = BCME_EPERM;
+-	} else {
+-		bcmerror = wlc_ioctl(wl->wlc, ioc.cmd, buf, ioc.len, wlif->wlcif);
+-	}
++	bcmerror = wlc_ioctl(wl->wlc, ioc.cmd, buf, ioc.len, wlif->wlcif);
+ 	WL_UNLOCK(wl);
+ 
+ done1:
