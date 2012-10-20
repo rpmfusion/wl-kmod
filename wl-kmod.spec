@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%define buildforkernels newest
+%define buildforkernels current
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	3%{?dist}.14
+Release:	4%{?dist}
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -18,6 +18,10 @@ Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
 Patch0:		broadcom-wl-5.100.82.112-license.patch
 Patch1:		broadcom-wl-5.100.82.112-kernel-3.2.patch
 Patch2:		broadcom-wl-5.100.82.112-kernel-3.4.patch
+Patch3:		broadcom-wl-5.100.82.112-cfg80211.patch
+Patch4:		broadcom-wl-5.100.82.112-kernel-3.6.patch
+Patch5:		broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
+Patch6:		broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
 
 BuildRequires:	%{_bindir}/kmodtool
 
@@ -56,6 +60,10 @@ pushd %{name}-%{version}-src
 %patch0 -p1 -b .license
 %patch1 -p1 -b .kernel-3.2
 %patch2 -p1 -b .kernel-3.4
+%patch3 -p1 -b .cfg80211
+%patch4 -p1 -b .kernel-3.6
+%patch5 -p1 -b .recent_kernel_semaphore
+%patch6 -p1 -b .recent_kernel_ioctl
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -85,6 +93,13 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Oct 20 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4
+- Added patch to build with CFG80211 API as default for F-16
+- Added patch to build for kernel >= 3.6
+- Added patch to include semaphore.h in wl_iw.h
+- Added patch from Archlinux to disable too many "ERROR @wl_cfg80211_get_station..." messages
+  in /var/log/messages since activation of CFG80211 API
+
 * Thu Oct 18 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.14
 - Rebuilt for updated kernel
 
