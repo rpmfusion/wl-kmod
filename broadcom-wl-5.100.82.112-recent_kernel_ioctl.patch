@@ -1,21 +1,31 @@
 diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c
---- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c	2012-10-16 22:04:18.718673254 +0200
-+++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2012-10-20 16:16:20.071738204 +0200
-@@ -1478,7 +1478,10 @@
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c	2012-11-07 17:34:38.141769328 +0100
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2012-11-07 18:16:51.342521040 +0100
+@@ -1475,13 +1475,15 @@
  		scb_val.val = 0;
  		err = wl_dev_ioctl(dev, WLC_GET_RSSI, &scb_val, sizeof(scb_val_t));
  		if (err) {
 -			WL_ERR(("Could not get rssi (%d)\n", err));
-+			if (err != -EINVAL) {
+-			return err;
++			if (err != -EINVAL)	
 +				// Don't fill syslog with EINVAL error
 +				WL_ERR(("Could not get rssi (%d)\n", err));
-+			}
- 			return err;
++		} else {
++			rssi = dtoh32(scb_val.val);
++			sinfo->filled |= STATION_INFO_SIGNAL;
++			sinfo->signal = rssi;
++			WL_DBG(("RSSI %d dBm\n", rssi));
  		}
- 		rssi = dtoh32(scb_val.val);
+-		rssi = dtoh32(scb_val.val);
+-		sinfo->filled |= STATION_INFO_SIGNAL;
+-		sinfo->signal = rssi;
+-		WL_DBG(("RSSI %d dBm\n", rssi));
+ 	}
+ 
+ 	return err;
 diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c
---- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c	2012-10-16 14:26:28.087617125 +0200
-+++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c	2012-10-20 16:16:20.447738352 +0200
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c	2012-11-07 17:52:29.434087011 +0100
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c	2012-11-07 17:59:01.626202471 +0100
 @@ -1587,11 +1587,7 @@
  	}
  

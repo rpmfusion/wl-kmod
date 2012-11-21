@@ -5,7 +5,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
  #endif
  	.ndo_get_stats = wl_get_stats,
  	.ndo_set_mac_address = wl_set_mac_address,
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 2, 0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 2, 0) || (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 42) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
 +	.ndo_set_rx_mode = wl_set_multicast_list,
 +#else
  	.ndo_set_multicast_list = wl_set_multicast_list,
