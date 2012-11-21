@@ -1,0 +1,31 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/Makefile hybrid-portsrc_x86_32-v5_100_82_112/Makefile
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/Makefile	2012-10-10 14:34:17.000000000 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/Makefile	2012-11-09 14:25:09.755455777 +0100
+@@ -13,6 +13,8 @@
+ #
+ # $Id: Makefile_kbuild_portsrc,v 1.6.54.4 2011-01-27 00:55:34 Exp $
+ 
++API_ETC_FILE := /etc/akmods/akmod-wl/api
++
+ ifneq ($(KERNELRELEASE),)
+ 
+   LINUXVER_GOODFOR_CFG80211:=$(strip $(shell \
+@@ -31,6 +33,18 @@
+     fi \
+   ))
+ 
++  API_FILE:=$(strip $(shell \
++    if [ -r "$(API_ETC_FILE)" ]; then \
++      echo TRUE; \
++    else \
++      echo FALSE; \
++    fi \
++  ))
++
++  ifeq ($(API_FILE), TRUE)
++    include $(API_ETC_FILE)
++  endif
++  
+   ifneq ($(API),)
+     ifeq ($(API), CFG80211)
+       APICHOICE := FORCE_CFG80211

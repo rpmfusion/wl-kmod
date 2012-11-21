@@ -1,3 +1,15 @@
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.h hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.h
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.h	2011-10-22 18:56:55.000000000 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.h	2012-11-07 18:04:55.286309234 +0100
+@@ -16,6 +16,8 @@
+ #ifndef _wl_cfg80211_h_
+ #define _wl_cfg80211_h_
+ 
++#include <linux/semaphore.h>
++
+ #include <net/cfg80211.h>
+ #include <wlioctl.h>
+ 
 diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_iw.h hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_iw.h
 --- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_iw.h	2011-10-22 18:56:55.000000000 +0200
 +++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_iw.h	2012-10-20 16:16:20.396738313 +0200
@@ -9,3 +21,15 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_iw.h hybrid-po
  #include <linux/wireless.h>
  
  #include <typedefs.h>
+diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.h hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.h
+--- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.h	2011-10-22 18:56:55.000000000 +0200
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.h	2012-11-07 18:04:55.394309261 +0100
+@@ -15,6 +15,8 @@
+ #ifndef _wl_linux_h_
+ #define _wl_linux_h_
+ 
++#include <linux/semaphore.h>
++
+ #include <wlc_types.h>
+ 
+ typedef struct wl_timer {

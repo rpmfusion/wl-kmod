@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -22,6 +22,7 @@ Patch3:		broadcom-wl-5.100.82.112-cfg80211.patch
 Patch4:		broadcom-wl-5.100.82.112-kernel-3.6.patch
 Patch5:		broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
 Patch6:		broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
+Patch7:		broadcom-wl-5.100.82.112-wext_workaround.patch
 
 BuildRequires:	%{_bindir}/kmodtool
 
@@ -40,7 +41,9 @@ driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-,
 BCM4322-, BCM43224-, and BCM43225-, BCM43227- and BCM43228-based hardware.
 
 NOTE: You must read the LICENSE.txt file in the docs directory before using
-this software.
+this software. You should read the fedora.readme file in the docs directory 
+in order to know how to  configure this software if you encounter problems 
+while boot sequence or with the CFG80211 API (revert to the WEXT API).
 
 %prep
 # error out if there was something wrong with kmodtool
@@ -64,6 +67,7 @@ pushd %{name}-%{version}-src
 %patch4 -p1 -b .kernel-3.6
 %patch5 -p1 -b .recent_kernel_semaphore
 %patch6 -p1 -b .recent_kernel_ioctl
+%patch7 -p1 -b .wext_workaround.patch
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -93,6 +97,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Nov 21 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-7
+- Added patch to choose API at build time (WEXT or CFG80211) to workaround #2548 #2562
+- Others patches cleaned-up
+
 * Sat Oct 20 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-6
 - Added patch to include semaphore.h in wl_iw.h
 - Added patch from Archlinux to disable too many "ERROR @wl_cfg80211_get_station..." messages
