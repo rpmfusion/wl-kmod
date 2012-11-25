@@ -7,7 +7,7 @@
 
 Name:		wl-kmod
 Version:	5.100.82.112
-Release:	7%{?dist}
+Release:	7%{?dist}.1
 Summary:	Kernel module for Broadcom wireless devices
 Group:		System Environment/Kernel
 License:	Redistributable, no modification permitted
@@ -97,6 +97,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Nov 25 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.1
+- Rebuilt for Fedora 18 Beta kernel
+
 * Wed Nov 21 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-7
 - Added patch to choose API at build time (WEXT or CFG80211) to workaround #2548 #2562
 - Others patches cleaned-up
