@@ -3,31 +3,32 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
-Name:		wl-kmod
-Version:	5.100.82.112
-Release:	7%{?dist}.16
-Summary:	Kernel module for Broadcom wireless devices
-Group:		System Environment/Kernel
-License:	Redistributable, no modification permitted
-URL:		http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_32-v5_100_82_112.tar.gz
-Source1:	http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_112.tar.gz
-Source11:	broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:		broadcom-wl-5.100.82.112-license.patch
-Patch1:		broadcom-wl-5.100.82.112-kernel-3.2.patch
-Patch2:		broadcom-wl-5.100.82.112-kernel-3.4.patch
-Patch3:		broadcom-wl-5.100.82.112-cfg80211.patch
-Patch4:		broadcom-wl-5.100.82.112-kernel-3.6.patch
-Patch5:		broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
-Patch6:		broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
-Patch7:		broadcom-wl-5.100.82.112-wext_workaround.patch
+Name:       wl-kmod
+Version:    5.100.82.112
+Release:    8%{?dist}
+Summary:    Kernel module for Broadcom wireless devices
+Group:      System Environment/Kernel
+License:    Redistributable, no modification permitted
+URL:        http://www.broadcom.com/support/802.11/linux_sta.php
+Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_32-v5_100_82_112.tar.gz
+Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_112.tar.gz
+Source11:   broadcom-wl-kmodtool-excludekernel-filterfile
+Patch0:     broadcom-wl-5.100.82.112-license.patch
+Patch1:     broadcom-wl-5.100.82.112-kernel-3.2.patch
+Patch2:     broadcom-wl-5.100.82.112-kernel-3.4.patch
+Patch3:     broadcom-wl-5.100.82.112-cfg80211.patch
+Patch4:     broadcom-wl-5.100.82.112-kernel-3.6.patch
+Patch5:     broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
+Patch6:     broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
+Patch7:     broadcom-wl-5.100.82.112-wext_workaround.patch
+Patch8:     broadcom-wl-5.100.82.112-kernel-3.8.patch
 
-BuildRequires:	%{_bindir}/kmodtool
+BuildRequires:  %{_bindir}/kmodtool
 
 # needed for plague to make sure it builds for i586 and i686
-ExclusiveArch:	i686 x86_64
+ExclusiveArch:  i686 x86_64
 # ppc disabled because broadcom only provides x86 and x86_64 bits
 
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
@@ -68,6 +69,7 @@ pushd %{name}-%{version}-src
 %patch5 -p1 -b .recent_kernel_semaphore
 %patch6 -p1 -b .recent_kernel_ioctl
 %patch7 -p1 -b .wext_workaround.patch
+%patch8 -p1 -b .kernel-3.8
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -97,6 +99,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Fri Mar 01 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-8
+- Added patch to build for kernel >= 3.8
+
 * Thu Feb 28 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.16
 - Rebuilt for kernel
 
