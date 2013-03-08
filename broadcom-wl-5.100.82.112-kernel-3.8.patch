@@ -15,8 +15,30 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/include/bcmutils.h hybri
  extern const char *bcmerrorstr(int bcmerror);
 diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c
 --- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c	2012-11-07 18:16:51.000000000 +0100
-+++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2013-03-01 16:40:19.344706682 +0100
-@@ -751,7 +751,11 @@
++++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_cfg80211.c	2013-03-08 17:34:37.798272480 +0100
+@@ -61,13 +61,20 @@
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
+ static s32 wl_cfg80211_set_tx_power(struct wiphy *wiphy,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
++           struct wireless_dev *wdev,
++#endif
+            enum nl80211_tx_power_setting type, s32 dbm);
+ #else
+ static s32 wl_cfg80211_set_tx_power(struct wiphy *wiphy,
+            enum tx_power_setting type, s32 dbm);
+ #endif
+ 
+-static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, s32 *dbm);
++static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
++           struct wireless_dev *wdev,
++#endif
++           s32 *dbm);
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38)
+ static s32 wl_cfg80211_config_default_key(struct wiphy *wiphy,
+@@ -751,7 +758,11 @@
  	else
  		memset(&join_params.params.bssid, 0, ETHER_ADDR_LEN);
  
@@ -28,7 +50,33 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hyb
  
  	err = wl_dev_ioctl(dev, WLC_SET_SSID, &join_params, join_params_size);
  	if (err) {
-@@ -2054,7 +2058,12 @@
+@@ -1110,7 +1121,11 @@
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
+ static s32
+-wl_cfg80211_set_tx_power(struct wiphy *wiphy, enum nl80211_tx_power_setting type, s32 dbm)
++wl_cfg80211_set_tx_power(struct wiphy *wiphy, 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
++           struct wireless_dev *wdev,
++#endif
++           enum nl80211_tx_power_setting type, s32 dbm)
+ #else
+ #define NL80211_TX_POWER_AUTOMATIC TX_POWER_AUTOMATIC
+ #define NL80211_TX_POWER_LIMITED TX_POWER_LIMITED
+@@ -1167,7 +1182,11 @@
+ 	return err;
+ }
+ 
+-static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, s32 *dbm)
++static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
++           struct wireless_dev *wdev,
++#endif
++           s32 *dbm)
+ {
+ 	struct wl_priv *wl = wiphy_to_wl(wiphy);
+ 	struct net_device *ndev = wl_to_ndev(wl);
+@@ -2054,7 +2073,12 @@
  	u16 beacon_interval;
  	s32 dtim_period;
  	size_t ie_len;
@@ -41,7 +89,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_cfg80211.c hyb
  	s32 err = 0;
  
  	ssid = &wl->profile->ssid;
-@@ -2085,8 +2094,19 @@
+@@ -2085,8 +2109,19 @@
  		beacon_interval = cpu_to_le16(bi->beacon_period);
  	} else {
  		WL_DBG(("Found the AP in the list - BSSID %pM\n", bss->bssid));
