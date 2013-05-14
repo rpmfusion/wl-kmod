@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
 Version:    5.100.82.112
-Release:    9%{?dist}.12
+Release:    10%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -24,6 +24,7 @@ Patch5:     broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
 Patch6:     broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
 Patch7:     broadcom-wl-5.100.82.112-wext_workaround.patch
 Patch8:     broadcom-wl-5.100.82.112-kernel-3.8.patch
+Patch9:     broadcom-wl-5.100.82.112-kernel-3.9.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -70,6 +71,7 @@ pushd %{name}-%{version}-src
 %patch6 -p1 -b .recent_kernel_ioctl
 %patch7 -p1 -b .wext_workaround.patch
 %patch8 -p1 -b .kernel-3.8
+%patch9 -p1 -b .kernel-3.9
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -99,6 +101,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue May 14 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-10
+- Added patch to build for kernel >= 3.9
+
 * Tue May 14 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.12
 - Rebuilt for kernel
 
