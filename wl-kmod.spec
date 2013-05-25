@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels akmod
 
 Name:       wl-kmod
 Version:    5.100.82.112
-Release:    9%{?dist}.13
+Release:    10%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -24,6 +24,7 @@ Patch5:     broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
 Patch6:     broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
 Patch7:     broadcom-wl-5.100.82.112-wext_workaround.patch
 Patch8:     broadcom-wl-5.100.82.112-kernel-3.8.patch
+Patch9:     broadcom-wl-5.100.82.112-kernel-3.9.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -70,6 +71,7 @@ pushd %{name}-%{version}-src
 %patch6 -p1 -b .recent_kernel_ioctl
 %patch7 -p1 -b .wext_workaround.patch
 %patch8 -p1 -b .kernel-3.8
+%patch9 -p1 -b .kernel-3.9
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -99,131 +101,24 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Sun May 19 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.13
-- Rebuilt for kernel
-
-* Mon May 13 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.12
-- Rebuilt for kernel
-
-* Fri May 03 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.11
-- Rebuilt for kernel
-
-* Wed May 01 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.10
-- Rebuilt for kernel
-
-* Thu Apr 18 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.9
-- Rebuilt for kernel
-
-* Thu Apr 18 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.8
-- Rebuilt for kernel
-
-* Sat Apr 13 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.7
-- Rebuilt for kernel
-
-* Sun Mar 24 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.6
-- Rebuilt for kernel
-
-* Sat Mar 23 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.5
-- Rebuilt for akmod
-
-* Mon Mar 18 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.4
-- Rebuilt for kernel
-
-* Fri Mar 15 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.3
-- Rebuilt for kernel
-
-* Sun Mar 10 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.2
-Rebuilt for kernel
-
-* Sun Mar 10 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-9.1
-Rebuilt for kernel
-
-* Fri Mar 08 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-9
+* Fri Mar 08 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-10
 - Modified patch to build for kernel >= 3.8 rfbz#2715
+- Modified patch to build for kernel >= 3.9
 
-* Wed Mar 06 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-8
+* Mon Mar 04 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-9
+- Added patch to build for kernel >= 3.9
+
+* Fri Mar 01 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-8
 - Added patch to build for kernel >= 3.8
-
-* Sat Mar 02 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.19
-- Rebuilt for kernel
-
-* Tue Feb 26 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.18
-- Rebuilt for kernel
-
-* Tue Feb 19 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.17
-- Rebuilt for kernel
-
-* Sat Feb 16 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.16
-- Rebuilt for kernel
-
-* Sat Feb 16 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.15
-- Rebuilt for kernel
-
-* Tue Feb 05 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.14
-- Rebuilt for kernel
-
-* Mon Feb 04 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.13
-- Rebuilt for akmod
-
-* Wed Jan 30 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.12
-- Rebuilt for akmod
-
-* Wed Jan 30 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.11
-- Rebuilt for updated kernel
-
-* Fri Jan 25 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.10
-- Rebuilt for updated kernel
-
-* Sat Jan 19 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.9
-- Rebuilt for updated kernel
-
-* Thu Jan 17 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.8
-- Rebuilt for updated kernel
-
-* Wed Jan 09 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.7
-- Rebuilt for updated kernel
-
-* Sun Dec 23 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.6
-- Rebuilt for updated kernel
-
-* Sat Dec 22 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.5
-- Rebuilt for updated kernel
-
-* Tue Dec 18 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.4
-- Rebuilt for updated kernel
-
-* Wed Dec 12 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.3
-- Rebuilt for updated kernel
-
-* Wed Dec 05 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.2
-- Rebuilt for updated kernel
-
-* Wed Nov 28 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-7.1
-- Rebuilt for updated kernel
 
 * Wed Nov 21 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-7
 - Added patch to choose API at build time (WEXT or CFG80211) to workaround #2548 #2562
 - Others patches cleaned-up
 
-* Tue Nov 20 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-6.4
-- Rebuilt for updated kernel
-
-* Thu Nov 08 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-6.3
-- Rebuilt for updated kernel
-
-* Thu Nov 01 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-6.2
-- Rebuilt for updated kernel
-
-* Tue Oct 23 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-6.1
-- Rebuilt for updated kernel
-
 * Sat Oct 20 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-6
 - Added patch to include semaphore.h in wl_iw.h
 - Added patch from Archlinux to disable too many "ERROR @wl_cfg80211_get_station..." messages
   in /var/log/messages since activation of CFG80211 API
-
-* Thu Oct 18 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-5.2
-- Rebuilt for updated kernel
 
 * Wed Oct 17 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5.1
 - Cleaned up patch for kernel >= 3.6
@@ -231,98 +126,17 @@ Rebuilt for kernel
 * Tue Oct 16 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5
 - Added patch to build for kernel >= 3.6
 
-* Thu Oct 11 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-4.1
-- Rebuilt for updated kernel
-
-* Wed Oct 10 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4
+* Wed Oct 10 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4.1
 - Added patch to build with CFG80211 API as default for F-17
 
-* Mon Oct 08 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.16
-- Rebuilt for updated kernel
-
-* Wed Oct 03 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.15
-- Rebuilt for updated kernel
-
-* Thu Sep 27 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.14
-- Rebuilt for updated kernel
-
-* Mon Sep 17 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.13
-- Rebuilt for updated kernel
-
-* Fri Aug 31 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.12
-- Rebuilt for updated kernel
-
-* Wed Aug 22 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.11
-- Rebuilt for updated kernel
-
-* Thu Aug 16 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.10
-- Rebuilt for updated kernel
-
-* Sat Aug 11 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.9
-- Rebuilt for updated kernel
-
-* Tue Jul 31 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.8
-- Rebuilt for updated kernel
-
-* Sat Jul 21 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.7
-- Rebuilt for updated kernel
-
-* Tue Jul 17 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.6
-- Rebuilt for updated kernel
-
-* Fri Jul 06 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.5
-- Rebuilt for updated kernel
-
-* Thu Jun 28 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.4
-- Rebuilt for updated kernel
-
-* Sat Jun 23 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3.3
+* Sun Jun 24 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3.1
 - spec file cleanup
-
-* Thu Jun 21 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.2
-- Rebuilt for updated kernel
-
-* Sun Jun 17 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-3.1
-- Rebuilt for updated kernel
 
 * Fri Jun 08 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3
 - Added patch to build for kernel >= 3.4
 
-* Tue Jun 05 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.13
-- Rebuilt for updated kernel
-
-* Sun May 27 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.12
-- Rebuilt for updated kernel
-
-* Sat May 26 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.11
-- Rebuilt for release kernel
-
-* Sun May 13 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.10
-- Rebuilt for release kernel
-
-* Wed May 09 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.9
-- rebuild for updated kernel
-
-* Sun May 06 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.8
-- rebuild for updated kernel
-
-* Sat May 05 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.7
-- rebuild for updated kernel
-
-* Wed May 02 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.6
-- rebuild for updated kernel
-
-* Sat Apr 28 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.5
-- rebuild for updated kernel
-
-* Sun Apr 22 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.4
-- rebuild for updated kernel
-
-* Mon Apr 16 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.3
-- rebuild for updated kernel
-
-* Thu Apr 12 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.2
-- rebuild for beta kernel
+* Thu Apr 19 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-2.1
+- Rebuilt for Rawhide
 
 * Tue Feb 07 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.1
 - Rebuild for UsrMove
