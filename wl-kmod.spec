@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
 Version:    5.100.82.112
-Release:    10%{?dist}.8
+Release:    11%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -25,6 +25,7 @@ Patch6:     broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
 Patch7:     broadcom-wl-5.100.82.112-wext_workaround.patch
 Patch8:     broadcom-wl-5.100.82.112-kernel-3.8.patch
 Patch9:     broadcom-wl-5.100.82.112-kernel-3.9.patch
+Patch10:    broadcom-wl-5.100.82.112-kernel-3.10.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -62,16 +63,17 @@ pushd %{name}-%{version}-src
 %else
  tar xzf %{SOURCE1}
 %endif
-%patch0 -p1 -b .license
-%patch1 -p1 -b .kernel-3.2
-%patch2 -p1 -b .kernel-3.4
-%patch3 -p1 -b .cfg80211
-%patch4 -p1 -b .kernel-3.6
-%patch5 -p1 -b .recent_kernel_semaphore
-%patch6 -p1 -b .recent_kernel_ioctl
-%patch7 -p1 -b .wext_workaround.patch
-%patch8 -p1 -b .kernel-3.8
-%patch9 -p1 -b .kernel-3.9
+%patch0  -p1 -b .license
+%patch1  -p1 -b .kernel-3.2
+%patch2  -p1 -b .kernel-3.4
+%patch3  -p1 -b .cfg80211
+%patch4  -p1 -b .kernel-3.6
+%patch5  -p1 -b .recent_kernel_semaphore
+%patch6  -p1 -b .recent_kernel_ioctl
+%patch7  -p1 -b .wext_workaround.patch
+%patch8  -p1 -b .kernel-3.8
+%patch9  -p1 -b .kernel-3.9
+%patch10 -p1 -b .kernel-3.10
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -101,6 +103,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Jul 23 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-11
+- Added patch to build for kernel >= 3.10
+
 * Sat Jul 13 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-10.8
 - Rebuilt for kernel
 
