@@ -1,0 +1,12 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c	2013-08-01 08:52:22.000000000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c	2013-09-14 16:06:43.404896532 +0200
+@@ -179,6 +179,8 @@
+ static void wl_report_radio_state(wl_info_t *wl);
+ #endif
+ 
++MODULE_LICENSE("MIXED/Proprietary");
++
+ static struct pci_device_id wl_id_table[] =
+ {
+ 	{ PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
