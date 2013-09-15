@@ -3,29 +3,22 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
-Version:    5.100.82.112
-Release:    11%{?dist}.8
+Version:    6.30.223.141
+Release:    1%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
 URL:        http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_32-v5_100_82_112.tar.gz
-Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_64-v5_100_82_112.tar.gz
-Source11:   broadcom-wl-kmodtool-excludekernel-filterfile
-Patch0:     broadcom-wl-5.100.82.112-license.patch
-Patch1:     broadcom-wl-5.100.82.112-kernel-3.2.patch
-Patch2:     broadcom-wl-5.100.82.112-kernel-3.4.patch
-Patch3:     broadcom-wl-5.100.82.112-cfg80211.patch
-Patch4:     broadcom-wl-5.100.82.112-kernel-3.6.patch
-Patch5:     broadcom-wl-5.100.82.112-recent_kernel_semaphore.patch
-Patch6:     broadcom-wl-5.100.82.112-recent_kernel_ioctl.patch
-Patch7:     broadcom-wl-5.100.82.112-wext_workaround.patch
-Patch8:     broadcom-wl-5.100.82.112-kernel-3.8.patch
-Patch9:     broadcom-wl-5.100.82.112-kernel-3.9.patch
-Patch10:    broadcom-wl-5.100.82.112-kernel-3.10.patch
+Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_141.tar.gz
+Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_141.tar.gz
+Source11:   wl-kmod-kmodtool-excludekernel-filterfile
+Patch0:     wl-kmod-001_license.patch
+Patch1:     wl-kmod-002_wext_workaround.patch
+Patch2:     wl-kmod-003_kernel_3.8.patch
+Patch3:     wl-kmod-004_kernel_3.10.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -41,7 +34,8 @@ ExclusiveArch:  i686 x86_64
 %description
 These packages contain Broadcom's IEEE 802.11a/b/g/n hybrid Linux device 
 driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-, 
-BCM4322-, BCM43224-, and BCM43225-, BCM43227- and BCM43228-based hardware.
+BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-, 
+BCM4331-, BCM4360 and -BCM4352- based hardware.
 
 NOTE: You must read the LICENSE.txt file in the docs directory before using
 this software. You should read the fedora.readme file in the docs directory 
@@ -64,16 +58,9 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0  -p1 -b .license
-%patch1  -p1 -b .kernel-3.2
-%patch2  -p1 -b .kernel-3.4
-%patch3  -p1 -b .cfg80211
-%patch4  -p1 -b .kernel-3.6
-%patch5  -p1 -b .recent_kernel_semaphore
-%patch6  -p1 -b .recent_kernel_ioctl
-%patch7  -p1 -b .wext_workaround.patch
-%patch8  -p1 -b .kernel-3.8
-%patch9  -p1 -b .kernel-3.9
-%patch10 -p1 -b .kernel-3.10
+%patch1  -p1 -b .wext_workaround.patch
+%patch2  -p1 -b .kernel-3.8
+%patch3  -p1 -b .kernel-3.10
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -103,6 +90,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Sep 14 2013 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-1
+- Upstream update to 6.30.223.141
+
 * Fri Aug 30 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-11.8
 - Rebuilt for kernel
 
@@ -124,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Jul 26 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-11.1
 - Rebuilt for kernel
 
-* Tue Jul 23 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-11
+* Tue Jul 23 2013 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-11
 - Added patch to build for kernel >= 3.10
 
 * Sat Jul 13 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-10.8
@@ -151,38 +141,38 @@ rm -rf $RPM_BUILD_ROOT
 * Tue May 14 2013 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-10.1
 - Rebuilt for kernel
 
-* Fri Mar 08 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-10
+* Fri Mar 08 2013 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-10
 - Modified patch to build for kernel >= 3.8 rfbz#2715
 - Modified patch to build for kernel >= 3.9
 
-* Mon Mar 04 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-9
+* Mon Mar 04 2013 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-9
 - Added patch to build for kernel >= 3.9
 
-* Fri Mar 01 2013 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-8
+* Fri Mar 01 2013 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-8
 - Added patch to build for kernel >= 3.8
 
 * Wed Nov 21 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-7
 - Added patch to choose API at build time (WEXT or CFG80211) to workaround #2548 #2562
 - Others patches cleaned-up
 
-* Sat Oct 20 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-6
+* Sat Oct 20 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-6
 - Added patch to include semaphore.h in wl_iw.h
 - Added patch from Archlinux to disable too many "ERROR @wl_cfg80211_get_station..." messages
   in /var/log/messages since activation of CFG80211 API
 
-* Wed Oct 17 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5.1
+* Wed Oct 17 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5.1
 - Cleaned up patch for kernel >= 3.6
 
-* Tue Oct 16 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5
+* Tue Oct 16 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-5
 - Added patch to build for kernel >= 3.6
 
-* Wed Oct 10 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4.1
+* Wed Oct 10 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-4.1
 - Added patch to build with CFG80211 API as default for F-17
 
-* Sun Jun 24 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3.1
+* Sun Jun 24 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3.1
 - spec file cleanup
 
-* Fri Jun 08 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3
+* Fri Jun 08 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-3
 - Added patch to build for kernel >= 3.4
 
 * Thu Apr 19 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-2.1
@@ -191,16 +181,16 @@ rm -rf $RPM_BUILD_ROOT
 * Tue Feb 07 2012 Nicolas Chauvet <kwizart@gmail.com> - 5.100.82.112-2.1
 - Rebuild for UsrMove
 
-* Mon Jan 09 2012 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-2
+* Mon Jan 09 2012 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-2
 - Added patch to build for kernel >= 3.2
 
-* Mon Nov 07 2011 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-1
+* Mon Nov 07 2011 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.112-1
 - Updated version to 5.100.82.112
 
 * Sat Nov 05 2011 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.38-1.1
 - Rebuilt for F-16
 
-* Fri Nov 04 2011 Nicolas Vieville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.38-1
+* Fri Nov 04 2011 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 5.100.82.38-1
 - Updated version to 5.100.82.38
 
 * Wed Nov 02 2011 Nicolas Chauvet <kwizart@gmail.com> - 5.60.48.36-2.12

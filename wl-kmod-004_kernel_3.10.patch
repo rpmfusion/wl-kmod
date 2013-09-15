@@ -1,16 +1,32 @@
-diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c
---- hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c	2012-11-07 17:59:01.000000000 +0100
-+++ hybrid-portsrc_x86_32-v5_100_82_112/src/wl/sys/wl_linux.c	2013-07-03 07:52:45.570402687 +0200
-@@ -2964,7 +2964,7 @@
- void
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c	2013-09-14 18:22:15.929527944 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c	2013-09-14 19:48:07.624004896 +0200
+@@ -3242,7 +3242,12 @@
  wl_tkip_printstats(wl_info_t *wl, bool group_key)
  {
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14)
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
++	struct seq_file sfile;
++	struct seq_file *debug_buf = &sfile;	
++#else
  	char debug_buf[512];
++#endif
  	int idx;
  	if (wl->tkipmodops) {
-@@ -3123,11 +3123,19 @@
+ 		if (group_key) {
+@@ -3255,7 +3260,11 @@
+ 			wl->tkipmodops->print_stats(debug_buf, wl->tkip_ucast_data);
+ 		else
+ 			return;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
++		printk("%s: TKIP stats from module: %s\n", debug_buf->buf, group_key?"Bcast":"Ucast");
++#else
+ 		printk("%s: TKIP stats from module: %s\n", debug_buf, group_key?"Bcast":"Ucast");
++#endif
+ 	}
+ #endif 
+ }
+@@ -3414,11 +3423,19 @@
  	return 0;
  }
  
@@ -30,7 +46,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
  	int len;
  
  	if (offset > 0) {
-@@ -3139,17 +3147,33 @@
+@@ -3430,17 +3447,33 @@
  		WL_ERROR(("%s: Not enough return buf space\n", __FUNCTION__));
  		return 0;
  	}
@@ -51,7 +67,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
  
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
  static int
- wl_proc_write(struct file *filp, const char __user *buff, unsigned long length, void *data)
+ wl_proc_write(struct file *filp, const char *buff, unsigned long length, void *data)
  {
  	wl_info_t * wl = (wl_info_t *)data;
 +#else
@@ -64,7 +80,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
  	int from_user = 0;
  	int bcmerror;
  
-@@ -3160,7 +3184,11 @@
+@@ -3451,7 +3484,11 @@
  	}
  	if (copy_from_user(&from_user, buff, 1)) {
  		WL_ERROR(("%s: copy from user failed\n", __FUNCTION__));
@@ -76,7 +92,7 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
  	}
  
  	if (from_user >= 0x30)
-@@ -3174,21 +3202,47 @@
+@@ -3465,22 +3502,48 @@
  		WL_ERROR(("%s: SET_MONITOR failed with %d\n", __FUNCTION__, bcmerror));
  		return -EIO;
  	}
@@ -124,3 +140,4 @@ diff -Naur hybrid-portsrc_x86_32-v5_100_82_112.orig/src/wl/sys/wl_linux.c hybrid
 +#endif
  	return 0;
  }
+ #ifdef WLOFFLD

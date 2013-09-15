@@ -1,0 +1,15 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_141.orig/src/wl/sys/wl_linux.c	2013-09-14 16:06:43.404896000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_141/src/wl/sys/wl_linux.c	2013-09-14 18:22:15.929527944 +0200
+@@ -912,7 +912,11 @@
+ 	pci_set_drvdata(pdev, NULL);
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0)
+ static struct pci_driver wl_pci_driver = {
++#else
++static struct pci_driver wl_pci_driver __refdata = {
++#endif
+ 	name:		"wl",
+ 	probe:		wl_pci_probe,
+ 	suspend:	wl_suspend,
