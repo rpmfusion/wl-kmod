@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.141
-Release:    1%{?dist}.16
+Release:    1%{?dist}.17
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -90,6 +90,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Jan 30 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-1.17
+- Rebuilt for kernel
+
 * Tue Jan 28 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-1.16
 - Rebuilt for kernel
 
