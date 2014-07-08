@@ -19,7 +19,8 @@ Patch0:     wl-kmod-001_license.patch
 Patch1:     wl-kmod-002_wext_workaround.patch
 Patch2:     wl-kmod-003_kernel_3.8.patch
 Patch3:     wl-kmod-004_kernel_3.10.patch
-Patch4:     wl-kmod-005_kernel_3.15.patch
+Patch4:     wl-kmod-005-2_devinit_late.patch
+Patch5:     wl-kmod-005_kernel_3.15.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -62,7 +63,8 @@ pushd %{name}-%{version}-src
 %patch1  -p1 -b .wext_workaround.patch
 %patch2  -p1 -b .kernel-3.8
 %patch3  -p1 -b .kernel-3.10
-%patch4  -p1 -b .kernel-3.15
+%patch4  -p1 -b .devinit_late
+%patch5  -p1 -b .kernel-3.15
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -92,6 +94,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Jul 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6
+- Added late patch for __devinit since kernel 3.8
+- Modified patch to build for kernel >= 3.15
+
 * Tue Jul 08 2014 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.141-6
 - Patch for 3.15 kernel
 
