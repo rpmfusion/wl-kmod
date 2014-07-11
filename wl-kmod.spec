@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.141
-Release:    6%{?dist}
+Release:    6%{?dist}.1
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -94,6 +94,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Fri Jul 11 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6.1
+- Rebuild for akmod
+
 * Tue Jul 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6
 - Added late patch for __devinit since kernel 3.8
 - Modified patch to build for kernel >= 3.15
