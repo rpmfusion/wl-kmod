@@ -6,22 +6,20 @@
 %global buildforkernels akmod
 
 Name:       wl-kmod
-Version:    6.30.223.141
-Release:    8%{?dist}
+Version:    6.30.223.248
+Release:    1%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
 URL:        http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_141.tar.gz
-Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_141.tar.gz
+Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_248.tar.gz
+Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_248.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
 Patch0:     wl-kmod-001_license.patch
 Patch1:     wl-kmod-002_wext_workaround.patch
 Patch2:     wl-kmod-003_kernel_3.8.patch
-Patch3:     wl-kmod-004_kernel_3.10.patch
-Patch4:     wl-kmod-005-2_devinit_late.patch
-Patch5:     wl-kmod-005_kernel_3.15.patch
-Patch6:     wl-kmod-006_gcc_4.9.patch
+Patch3:     wl-kmod-004_kernel_3.15.patch
+Patch4:     wl-kmod-005_gcc_4.9.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -63,10 +61,8 @@ pushd %{name}-%{version}-src
 %patch0  -p1 -b .license
 %patch1  -p1 -b .wext_workaround.patch
 %patch2  -p1 -b .kernel-3.8
-%patch3  -p1 -b .kernel-3.10
-%patch4  -p1 -b .devinit_late
-%patch5  -p1 -b .kernel-3.15
-%patch6  -p1 -b .gcc-4.9
+%patch3  -p1 -b .kernel-3.15
+%patch4  -p1 -b .gcc-4.9
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -96,6 +92,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Jul 15 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-1
+- Upstream update to 6.30.223.248
+- Patches cleaned-up and removed
+
 * Tue Jul 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-8
 - Added late patch for __devinit since kernel 3.8
 - Modified patch to build for kernel >= 3.15
