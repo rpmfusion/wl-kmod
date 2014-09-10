@@ -1,0 +1,45 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c	2014-07-15 21:28:47.002546122 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c	2014-09-10 19:27:13.301316520 +0200
+@@ -63,8 +63,13 @@
+ static s32 wl_cfg80211_join_ibss(struct wiphy *wiphy, struct net_device *dev,
+            struct cfg80211_ibss_params *params);
+ static s32 wl_cfg80211_leave_ibss(struct wiphy *wiphy, struct net_device *dev);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0)
++static s32 wl_cfg80211_get_station(struct wiphy *wiphy,
++           struct net_device *dev, const u8 *mac, struct station_info *sinfo);
++#else
+ static s32 wl_cfg80211_get_station(struct wiphy *wiphy,
+            struct net_device *dev, u8 *mac, struct station_info *sinfo);
++#endif
+ static s32 wl_cfg80211_set_power_mgmt(struct wiphy *wiphy,
+            struct net_device *dev, bool enabled, s32 timeout);
+ static int wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
+@@ -1387,7 +1392,11 @@
+ 	key_endian_to_host(&key);
+ 
+ 	params.key_len = (u8) min_t(u8, DOT11_MAX_KEY_SIZE, key.len);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0)
++	memcpy((void *)params.key, key.data, params.key_len);
++#else
+ 	memcpy(params.key, key.data, params.key_len);
++#endif
+ 
+ 	if ((err = wl_dev_ioctl(dev, WLC_GET_WSEC, &wsec, sizeof(wsec)))) {
+ 		return err;
+@@ -1421,9 +1430,15 @@
+ 	return err;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0)
++static s32
++wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
++                        const u8 *mac, struct station_info *sinfo)
++#else
+ static s32
+ wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
+                         u8 *mac, struct station_info *sinfo)
++#endif
+ {
+ 	struct wl_cfg80211_priv *wl = wiphy_to_wl(wiphy);
+ 	scb_val_t scb_val;

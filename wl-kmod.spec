@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -20,6 +20,7 @@ Patch1:     wl-kmod-002_wext_workaround.patch
 Patch2:     wl-kmod-003_kernel_3.8.patch
 Patch3:     wl-kmod-004_kernel_3.15.patch
 Patch4:     wl-kmod-005_gcc_4.9.patch
+Patch5:     wl-kmod-006_kernel_3.16.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -63,6 +64,7 @@ pushd %{name}-%{version}-src
 %patch2  -p1 -b .kernel-3.8
 %patch3  -p1 -b .kernel-3.15
 %patch4  -p1 -b .gcc-4.9
+%patch5  -p1 -b .kernel-3.16
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -92,6 +94,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Sep 10 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-2
+- Added patch to build for kernel >= 3.16
+
 * Tue Jul 15 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-1
 - Upstream update to 6.30.223.248
 - Patches cleaned-up and removed
