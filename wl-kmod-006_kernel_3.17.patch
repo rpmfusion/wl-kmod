@@ -1,0 +1,16 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_linux.c	2014-07-15 17:27:12.550312000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_linux.c	2014-10-03 22:02:07.746840461 +0200
+@@ -1313,7 +1313,12 @@
+ 	dev->priv = priv_link;
+ #else
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 17, 0)
+ 	dev = alloc_netdev(sizeof(priv_link_t), intf_name, ether_setup);
++#else
++	dev = alloc_netdev(sizeof(priv_link_t), intf_name, NET_NAME_UNKNOWN, 
++		ether_setup);
++#endif 
+ 	if (!dev) {
+ 		WL_ERROR(("wl%d: %s: alloc_netdev failed\n",
+ 			(wl->pub)?wl->pub->unit:wlif->subunit, __FUNCTION__));
