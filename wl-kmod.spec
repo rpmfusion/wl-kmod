@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    4%{?dist}.9
+Release:    5%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -21,6 +21,8 @@ Patch2:     wl-kmod-003_kernel_3.8.patch
 Patch3:     wl-kmod-004_kernel_3.15.patch
 Patch4:     wl-kmod-005_kernel_3.16.patch
 Patch5:     wl-kmod-006_kernel_3.17.patch
+Patch6:     wl-kmod-007_kernel_3.18.patch
+Patch7:     wl-kmod-008_kernel_3.18_null_pointer.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -65,6 +67,8 @@ pushd %{name}-%{version}-src
 %patch3  -p1 -b .kernel-3.15
 %patch4  -p1 -b .kernel-3.16
 %patch5  -p1 -b .kernel-3.17
+%patch6  -p1 -b .kernel-3.18
+%patch7  -p1 -b .kernel-3.18_null_pointer
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -94,6 +98,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Feb 04 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-6
+- Added patch to fix rfbz#3533 for kernel >= 3.18
+- Added patch to build for kernel >= 3.18
+
 * Mon Feb 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.9
 - Rebuilt for kernel
 

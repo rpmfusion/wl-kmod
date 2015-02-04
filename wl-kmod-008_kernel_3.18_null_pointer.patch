@@ -1,0 +1,17 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_linux.c	2014-10-03 22:02:07.746840000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_linux.c	2015-02-04 10:27:39.501789047 +0100
+@@ -2173,8 +2173,13 @@
+ 	wlif = WL_DEV_IF(dev);
+ 	wl = WL_INFO(dev);
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0)
++	skb->prev = NULL;
++#endif
+ 	if (WL_ALL_PASSIVE_ENAB(wl) || (WL_RTR() && WL_CONFIG_SMP())) {
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 18, 0)
+ 		skb->prev = NULL;
++#endif
+ 
+ 		TXQ_LOCK(wl);
+ 
