@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    5%{?dist}.1
+Release:    6%{?dist}.1
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -19,10 +19,11 @@ Patch0:     wl-kmod-001_license.patch
 Patch1:     wl-kmod-002_wext_workaround.patch
 Patch2:     wl-kmod-003_kernel_3.8.patch
 Patch3:     wl-kmod-004_kernel_3.15.patch
-Patch4:     wl-kmod-005_kernel_3.16.patch
-Patch5:     wl-kmod-006_kernel_3.17.patch
-Patch6:     wl-kmod-007_kernel_3.18.patch
-Patch7:     wl-kmod-008_kernel_3.18_null_pointer.patch
+Patch4:     wl-kmod-005_gcc_4.9.patch
+Patch5:     wl-kmod-006_kernel_3.16.patch
+Patch6:     wl-kmod-007_kernel_3.17.patch
+Patch7:     wl-kmod-008_kernel_3.18.patch
+Patch8:     wl-kmod-009_kernel_3.18_null_pointer.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -65,10 +66,11 @@ pushd %{name}-%{version}-src
 %patch1  -p1 -b .wext_workaround.patch
 %patch2  -p1 -b .kernel-3.8
 %patch3  -p1 -b .kernel-3.15
-%patch4  -p1 -b .kernel-3.16
-%patch5  -p1 -b .kernel-3.17
-%patch6  -p1 -b .kernel-3.18
-%patch7  -p1 -b .kernel-3.18_null_pointer
+%patch4  -p1 -b .gcc-4.9
+%patch5  -p1 -b .kernel-3.16
+%patch6  -p1 -b .kernel-3.17
+%patch7  -p1 -b .kernel-3.18
+%patch8  -p1 -b .kernel-3.18_null_pointer
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -98,197 +100,55 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Sun Feb 08 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.1
+* Sun Feb 08 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.1
 - Rebuilt for kernel
 
 * Wed Feb 04 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-6
 - Added patch to fix rfbz#3533 for kernel >= 3.18
+
+* Mon Feb 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.6
+- Rebuilt for kernel
+
+* Wed Jan 21 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.5
+- Rebuilt for kernel
+
+* Thu Jan 15 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.4
+- Rebuilt for kernel
+
+* Sat Jan 10 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.3
+- Rebuilt for kernel
+
+* Fri Dec 19 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.2
+- Rebuilt for kernel
+
+* Sun Dec 14 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5.1
+- Rebuilt for kernel
+
+* Fri Dec 05 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-5
+- Rebuilt for f21 final kernel
+
+* Mon Oct 27 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-4
 - Added patch to build for kernel >= 3.18
-
-* Mon Feb 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.9
-- Rebuilt for kernel
-
-* Sat Jan 10 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.8
-- Rebuilt for kernel
-
-* Wed Dec 24 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.7
-- Rebuilt for kernel
-
-* Thu Dec 18 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.6
-- Rebuilt for kernel
-
-* Sat Dec 13 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.5
-- Rebuilt for kernel
-
-* Sun Nov 23 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.4
-- Rebuilt for kernel
-
-* Sun Nov 16 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.3
-- Rebuilt for kernel
-
-* Mon Nov 10 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.2
-- Rebuilt for kernel
-
-* Fri Oct 31 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4.1
-- Rebuilt for kernel
-
-* Wed Oct 29 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-4
-- Rebuild for akmod
-
-* Tue Oct 28 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-3.4
-- Rebuilt for kernel
-
-* Thu Oct 16 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-3.3
-- Rebuilt for kernel
-
-* Fri Oct 10 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-3.2
-- Rebuilt for kernel
-
-* Tue Oct 07 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-3.1
-- Rebuilt for kernel
 
 * Fri Oct 03 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-3
 - Added patch to build for kernel >= 3.17
 
-* Fri Sep 19 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-2.2
-- Rebuilt for kernel
-
-* Thu Sep 18 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-2.1
-- Rebuilt for kernel
-
 * Wed Sep 10 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-2
 - Added patch to build for kernel >= 3.16
 
-* Tue Sep 09 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.9
-- Rebuilt for kernel
-
-* Sat Aug 30 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.8
-- Rebuilt for kernel
-
-* Wed Aug 20 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.7
-- Rebuilt for kernel
-
-* Wed Aug 20 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.6
-- Rebuilt for kernel
-
-* Fri Aug 15 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.5
-- Rebuilt for kernel
-
-* Wed Aug 13 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.4
-- Rebuilt for kernel
-
-* Sat Aug 02 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.3
-- Rebuilt for kernel
-
-* Fri Aug 01 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.2
-- Rebuilt for kernel
-
-* Fri Jul 18 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-1.1
-- Rebuilt for kernel
-
-* Thu Jul 17 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-1
+* Tue Jul 15 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-1
 - Upstream update to 6.30.223.248
 - Patches cleaned-up and removed
 
-* Thu Jul 17 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-6.2
-- Rebuilt for kernel
-
-* Fri Jul 11 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6.1
-- Rebuild for akmod
-
-* Tue Jul 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6
+* Tue Jul 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-8
 - Added late patch for __devinit since kernel 3.8
 - Modified patch to build for kernel >= 3.15
 
-* Tue Jul 08 2014 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.141-6
-- Patch for 3.15 kernel
+* Thu May 08 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-7
+- Added patch to build with gcc >= 4.9 - fix error __TIME__ and __DATE__ macros
 
-* Tue Jul 08 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.29
-- Rebuilt for kernel
-
-* Tue Jul 08 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.28
-- Rebuilt for kernel
-
-* Tue Jul 08 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.27
-- Rebuilt for kernel
-
-* Tue Jun 17 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.26
-- Rebuilt for kernel
-
-* Fri Jun 13 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.25
-- Rebuilt for kernel
-
-* Sun Jun 08 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.24
-- Rebuilt for kernel
-
-* Tue Jun 03 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.23
-- Rebuilt for kernel
-
-* Thu May 15 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.22
-- Rebuilt for kernel
-
-* Thu May 08 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.21
-- Rebuilt for kernel
-
-* Wed Apr 30 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.20
-- Rebuilt for kernel
-
-* Sat Apr 26 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.19
-- Rebuilt for kernel
-
-* Wed Apr 16 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.18
-- Rebuilt for kernel
-
-* Fri Apr 04 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.17
-- Rebuilt for kernel
-
-* Wed Apr 02 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.16
-- Rebuilt for kernel
-
-* Tue Mar 25 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.15
-- Rebuilt for kernel
-
-* Sun Mar 09 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.14
-- Rebuilt for kernel
-
-* Tue Mar 04 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.13
-- Rebuilt for kernel
-
-* Tue Feb 25 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.12
-- Rebuilt for kernel
-
-* Mon Feb 24 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.11
-- Rebuilt for kernel
-
-* Mon Feb 17 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.10
-- Rebuilt for kernel
-
-* Sat Feb 15 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.9
-- Rebuilt for kernel
-
-* Wed Feb 12 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.8
-- Rebuilt for kernel
-
-* Fri Feb 07 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.7
-- Rebuilt for kernel
-
-* Thu Jan 30 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.6
-- Rebuilt for kernel
-
-* Tue Jan 28 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.5
-- Rebuilt for kernel
-
-* Fri Jan 17 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.4
-- Rebuilt for kernel
-
-* Sun Jan 12 2014 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.3
-- Rebuilt for kernel
-
-* Wed Dec 25 2013 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.2
-- Rebuilt for kernel
-
-* Fri Dec 20 2013 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5.1
-- Rebuilt for kernel
+* Tue Apr 22 2014 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.141-6
+- Added patch to build for kernel >= 3.15
 
 * Tue Dec 10 2013 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.141-5
 - Rebuilt for f20 final kernel
