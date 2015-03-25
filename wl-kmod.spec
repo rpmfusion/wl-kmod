@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-#global buildforkernels newest
+%global buildforkernels akmod
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    7%{?dist}
+Release:    7.1%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -24,7 +24,7 @@ Patch5:     wl-kmod-006_kernel_3.16.patch
 Patch6:     wl-kmod-007_kernel_3.17.patch
 Patch7:     wl-kmod-008_kernel_3.18.patch
 Patch8:     wl-kmod-009_kernel_3.18_null_pointer.patch
-Patch9:     wl-kmod-009_kernel_4.0.patch
+Patch9:     wl-kmod-010_kernel_4.0.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -102,6 +102,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Mar 25 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-7.1
+- Modified patch for kernel >= 4.0 to allow build for kernel < 4.0
+
 * Mon Mar 23 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7
 - Add patch for 4.0 kernel
 
