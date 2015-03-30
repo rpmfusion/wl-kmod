@@ -102,18 +102,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Mon Mar 30 2015 Nicolas Chauvet <kwizart@gmail.com>
+* Mon Mar 30 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.4
 - Rebuilt for kernel
 
-<<<<<<< wl-kmod.spec
-* Mon Mar 30 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.3
-- Rebuilt for kernel
-
-=======
-* Fri Mar 27 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.3
-- Rebuilt for kernel
-
->>>>>>> 1.108
 * Wed Mar 25 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.2
 - Rebuilt for current
 
