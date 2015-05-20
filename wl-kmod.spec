@@ -3,17 +3,17 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    6%{?dist}.10
+Release:    7%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
-URL:        http://www.broadcom.com/support/802.11/linux_sta.php
-Source0:    http://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_248.tar.gz
-Source1:    http://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_248.tar.gz
+URL:        https://www.broadcom.com/support/?gid=1
+Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_248.tar.gz
+Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_248.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
 Patch0:     wl-kmod-001_license.patch
 Patch1:     wl-kmod-002_wext_workaround.patch
@@ -100,6 +100,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed May 20 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-7
+- Update new Broadcom upstream URLs in SPEC file
+
 * Wed May 13 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.10
 - Rebuilt for kernel
 
