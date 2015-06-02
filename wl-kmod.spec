@@ -3,11 +3,11 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+#global buildforkernels newest
 
 Name:       wl-kmod
 Version:    6.30.223.248
-Release:    7%{?dist}.2
+Release:    8%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -24,6 +24,7 @@ Patch5:     wl-kmod-006_kernel_3.16.patch
 Patch6:     wl-kmod-007_kernel_3.17.patch
 Patch7:     wl-kmod-008_kernel_3.18.patch
 Patch8:     wl-kmod-009_kernel_3.18_null_pointer.patch
+Patch9:     wl-kmod-010_kernel_4.0.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -71,6 +72,7 @@ pushd %{name}-%{version}-src
 %patch6  -p1 -b .kernel-3.17
 %patch7  -p1 -b .kernel-3.18
 %patch8  -p1 -b .kernel-3.18_null_pointer
+%patch9  -p1 -b .kernel-4.0
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -100,31 +102,43 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Tue Jun 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.2
-- Rebuilt for kernel
-
-* Sun May 24 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.1
-- Rebuilt for kernel
-
-* Wed May 20 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-7
+* Wed May 20 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-8
 - Update new Broadcom upstream URLs in SPEC file
 
-* Wed May 13 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.10
+* Wed May 20 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.10
 - Rebuilt for kernel
 
-* Sat May 09 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.9
+* Wed May 13 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.9
 - Rebuilt for kernel
 
-* Sat May 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.8
+* Sat May 09 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.8
 - Rebuilt for kernel
 
-* Wed Apr 22 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.7
+* Sat May 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.7
 - Rebuilt for kernel
 
-* Wed Apr 15 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.6
+* Wed Apr 22 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.6
 - Rebuilt for kernel
 
-* Mon Mar 30 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.5
+* Wed Apr 15 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.5
+- Rebuilt for kernel
+
+* Mon Mar 30 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.4
+- Rebuilt for kernel
+
+* Wed Mar 25 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7.2
+- Rebuilt for current
+
+* Wed Mar 25 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-7.1
+- Modified patch for kernel >= 4.0 to allow build for kernel < 4.0
+
+* Mon Mar 23 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-7
+- Add patch for 4.0 kernel
+
+* Mon Mar 23 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.6
+- Rebuilt for kernel
+
+* Sat Mar 21 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.5
 - Rebuilt for kernel
 
 * Tue Mar 10 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-6.4

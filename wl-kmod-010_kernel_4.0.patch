@@ -1,0 +1,27 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c	2014-10-27 11:21:58.213536000 +0100
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c	2015-03-23 19:46:18.826690045 +0100
+@@ -1456,7 +1456,11 @@
+ 		WL_DBG(("Could not get rate (%d)\n", err));
+ 	} else {
+ 		rate = dtoh32(rate);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0)
++		sinfo->filled |= BIT(NL80211_STA_INFO_TX_BITRATE);
++#else
+ 		sinfo->filled |= STATION_INFO_TX_BITRATE;
++#endif
+ 		sinfo->txrate.legacy = rate * 5;
+ 		WL_DBG(("Rate %d Mbps\n", (rate / 2)));
+ 	}
+@@ -1469,7 +1473,11 @@
+ 			return err;
+ 		}
+ 		rssi = dtoh32(scb_val.val);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0)
++		sinfo->filled |= BIT(NL80211_STA_INFO_SIGNAL);
++#else
+ 		sinfo->filled |= STATION_INFO_SIGNAL;
++#endif
+ 		sinfo->signal = rssi;
+ 		WL_DBG(("RSSI %d dBm\n", rssi));
+ 	}
