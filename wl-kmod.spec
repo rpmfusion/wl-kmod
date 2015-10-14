@@ -3,29 +3,19 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels current
 
 Name:       wl-kmod
-Version:    6.30.223.248
-Release:    9%{?dist}.3
+Version:    6.30.223.271
+Release:    1%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
 URL:        https://www.broadcom.com/support/?gid=1
-Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_248.tar.gz
-Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_248.tar.gz
+Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
+Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
-Patch0:     wl-kmod-001_license.patch
-Patch1:     wl-kmod-002_wext_workaround.patch
-Patch2:     wl-kmod-003_kernel_3.8.patch
-Patch3:     wl-kmod-004_kernel_3.15.patch
-Patch4:     wl-kmod-005_gcc_4.9.patch
-Patch5:     wl-kmod-006_kernel_3.16.patch
-Patch6:     wl-kmod-007_kernel_3.17.patch
-Patch7:     wl-kmod-008_kernel_3.18.patch
-Patch8:     wl-kmod-009_kernel_3.18_null_pointer.patch
-Patch9:     wl-kmod-010_kernel_4.0.patch
-Patch10:    wl-kmod-011_kernel_4.2.patch
+Patch0:     wl-kmod-001_wext_workaround.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -64,17 +54,7 @@ pushd %{name}-%{version}-src
 %else
  tar xzf %{SOURCE1}
 %endif
-%patch0  -p1 -b .license
-%patch1  -p1 -b .wext_workaround.patch
-%patch2  -p1 -b .kernel-3.8
-%patch3  -p1 -b .kernel-3.15
-%patch4  -p1 -b .gcc-4.9
-%patch5  -p1 -b .kernel-3.16
-%patch6  -p1 -b .kernel-3.17
-%patch7  -p1 -b .kernel-3.18
-%patch8  -p1 -b .kernel-3.18_null_pointer
-%patch9  -p1 -b .kernel-4.0
-%patch10 -p1 -b .kernel-4.2
+%patch0  -p1 -b .wext_workaround.patch
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -104,6 +84,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Oct 14 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-1
+- Upstream update to 6.30.223.271
+- Patches cleaned-up and removed
+
 * Tue Oct 06 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-9.3
 - Rebuilt for kernel
 
