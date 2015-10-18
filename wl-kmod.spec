@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -16,6 +16,7 @@ Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_3
 Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
 Patch0:     wl-kmod-001_wext_workaround.patch
+Patch1:     wl-kmod-002_kernel_3.18_null_pointer.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -55,6 +56,7 @@ pushd %{name}-%{version}-src
  tar xzf %{SOURCE1}
 %endif
 %patch0  -p1 -b .wext_workaround.patch
+%patch1  -p1 -b .kernel_3.18_null_pointer.patch
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -84,6 +86,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Oct 17 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-2
+- Re-add patch for kernel >= 3.18
+
 * Wed Oct 14 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-1
 - Upstream update to 6.30.223.271
 - Patches cleaned-up and removed
