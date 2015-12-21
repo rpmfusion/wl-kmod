@@ -7,7 +7,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -18,6 +18,7 @@ Source11:   wl-kmod-kmodtool-excludekernel-filterfile
 Patch0:     wl-kmod-001_wext_workaround.patch
 Patch1:     wl-kmod-002_kernel_3.18_null_pointer.patch
 Patch2:     wl-kmod-003_gcc_4.9_remove_TIME_DATE_macros.patch
+Patch3:     wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -59,6 +60,7 @@ pushd %{name}-%{version}-src
 %patch0  -p1 -b .wext_workaround.patch
 %patch1  -p1 -b .kernel_3.18_null_pointer.patch
 %patch2  -p1 -b .gcc_4.9_remove_TIME_DATE_macros
+%patch3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -88,6 +90,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Dec 21 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-4
+- Add patch to replace call to rdtscl with call to rdtsc for kernel >= 4.3
+  thanks to Tim Thomas
+
 * Sun Oct 18 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-3
 - Re-add patch to remove __DATE__ and __TIME__ macros for gcc >= 4.9 in order to allow
   reproducible builds - thanks to Tim Thomas
