@@ -3,11 +3,12 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels current
+%global buildforkernels akmod
+%global debug_package %{nil}
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -19,6 +20,8 @@ Patch0:     wl-kmod-001_wext_workaround.patch
 Patch1:     wl-kmod-002_kernel_3.18_null_pointer.patch
 Patch2:     wl-kmod-003_gcc_4.9_remove_TIME_DATE_macros.patch
 Patch3:     wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch
+Patch4:     wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch
+Patch5:     wl-kmod-006_gcc_6_fix_indentation_warnings.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -61,6 +64,8 @@ pushd %{name}-%{version}-src
 %patch1  -p1 -b .kernel_3.18_null_pointer.patch
 %patch2  -p1 -b .gcc_4.9_remove_TIME_DATE_macros
 %patch3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
+%patch4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
+%patch5  -p1 -b .gcc_6_fix_indentation_warnings
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -90,6 +95,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Aug 29 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-5
+- Add patch to replace IEEE80211_BAND_x macros with NL80211_BAND_x ones for kernel >= 4.7
+  thanks to Tim Thomas
+- Add patch to fix GCC6 indentation warnings
+
 * Mon Dec 21 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-4
 - Add patch to replace call to rdtscl with call to rdtsc for kernel >= 4.3
   thanks to Tim Thomas
