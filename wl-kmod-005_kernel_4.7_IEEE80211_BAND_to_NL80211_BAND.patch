@@ -102,7 +102,7 @@ diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_
  			}
  			chan = wf_chspec_ctlchan(chanspec);
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 7, 0)
-+			band = (chan <= CH_MAX_2G_CHANNEL) ? NL80211_BAND_2GHZ : IEEE80211_BAND_5GHZ;
++			band = (chan <= CH_MAX_2G_CHANNEL) ? NL80211_BAND_2GHZ : NL80211_BAND_5GHZ;
 +#else
  			band = (chan <= CH_MAX_2G_CHANNEL) ? IEEE80211_BAND_2GHZ : IEEE80211_BAND_5GHZ;
 +#endif

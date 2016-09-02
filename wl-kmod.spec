@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    5%{?dist}
+Release:    6%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -95,6 +95,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Fri Sep 02 2016 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.271-6
+- Fix 4.7 kernel patch
+
 * Mon Aug 29 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-5
 - Add patch to replace IEEE80211_BAND_x macros with NL80211_BAND_x ones for kernel >= 4.7
   thanks to Tim Thomas
