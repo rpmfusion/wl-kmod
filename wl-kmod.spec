@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    6%{?dist}
+Release:    7%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -22,6 +22,7 @@ Patch2:     wl-kmod-003_gcc_4.9_remove_TIME_DATE_macros.patch
 Patch3:     wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch
 Patch4:     wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch
 Patch5:     wl-kmod-006_gcc_6_fix_indentation_warnings.patch
+Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -66,6 +67,7 @@ pushd %{name}-%{version}-src
 %patch3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
 %patch4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
 %patch5  -p1 -b .gcc_6_fix_indentation_warnings
+%patch6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -95,6 +97,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Sep 07 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-7
+- Add patch for kernel >= 4.8 - add cfg80211_scan_info struct in cfg80211_scan_done call
+
 * Fri Sep 02 2016 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.271-6
 - Fix 4.7 kernel patch
 
