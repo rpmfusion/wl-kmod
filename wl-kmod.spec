@@ -8,13 +8,13 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    7%{?dist}
+Release:    8%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
-URL:        https://www.broadcom.com/support/?gid=1
-Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
-Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
+URL:        https://www.broadcom.com/support/download-search/?pf=Wireless+LAN+Infrastructure
+Source0:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
+Source1:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
 Patch0:     wl-kmod-001_wext_workaround.patch
 Patch1:     wl-kmod-002_kernel_3.18_null_pointer.patch
@@ -23,6 +23,7 @@ Patch3:     wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch
 Patch4:     wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch
 Patch5:     wl-kmod-006_gcc_6_fix_indentation_warnings.patch
 Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
+Patch7:     wl-kmod-008_fix_kernel_warnings.patch
 
 BuildRequires:  %{_bindir}/kmodtool
 
@@ -68,6 +69,7 @@ pushd %{name}-%{version}-src
 %patch4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
 %patch5  -p1 -b .gcc_6_fix_indentation_warnings
 %patch6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
+%patch7  -p1 -b .fix_kernel_warnings
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -97,6 +99,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Feb 08 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-8
+- Add patch to fix kernel warnings - thanks to Adrien Bustany rfbz#4427
+- Updated URLs to new Broadcom WEB site
+
 * Wed Sep 07 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-7
 - Add patch for kernel >= 4.8 - add cfg80211_scan_info struct in cfg80211_scan_done call
 
