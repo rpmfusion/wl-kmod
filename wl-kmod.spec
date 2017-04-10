@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 - Add patch for kernel >= 4.11 - remove last_rx reference in net_device struct rfbz#4503
 - Add elfutils-libelf-devel to BuildRequires
 
+* Sun Mar 26 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 6.30.223.271-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Wed Feb 08 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-8
 - Add patch to fix kernel warnings - thanks to Adrien Bustany rfbz#4427
 - Updated URLs to new Broadcom WEB site
