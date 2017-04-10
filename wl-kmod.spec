@@ -24,8 +24,10 @@ Patch4:     wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch
 Patch5:     wl-kmod-006_gcc_6_fix_indentation_warnings.patch
 Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
 Patch7:     wl-kmod-008_fix_kernel_warnings.patch
+Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
 
 BuildRequires:  %{_bindir}/kmodtool
+BuildRequires:  elfutils-libelf-devel
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -70,6 +72,7 @@ pushd %{name}-%{version}-src
 %patch5  -p1 -b .gcc_6_fix_indentation_warnings
 %patch6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
 %patch7  -p1 -b .fix_kernel_warnings
+%patch8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -99,6 +102,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Apr 10 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-9
+- Add patch for kernel >= 4.11 - remove last_rx reference in net_device struct rfbz#4503
+- Add elfutils-libelf-devel to BuildRequires
+
 * Sun Mar 26 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 6.30.223.271-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
