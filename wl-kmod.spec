@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    10%{?dist}
+Release:    11%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -26,12 +26,13 @@ Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
 Patch7:     wl-kmod-008_fix_kernel_warnings.patch
 Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
 
-BuildRequires:  %{_bindir}/kmodtool
-BuildRequires:  elfutils-libelf-devel
-
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
 # ppc disabled because broadcom only provides x86 and x86_64 bits
+
+# Get the needed BuildRequires (in parts depending on what we build for)
+%global AkmodsBuildRequires %{_bindir}/kmodtool, elfutils-libelf-devel
+BuildRequires:  %{AkmodsBuildRequires}
 
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
@@ -102,6 +103,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Apr 12 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-11
+- Add akmod-wl AkmodsBuildRequires and fix package BuildRequires
+
 * Mon Apr 10 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-10
 - Fix build Release tag
 
