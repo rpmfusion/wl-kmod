@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    14%{?dist}
+Release:    15%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -26,6 +26,7 @@ Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
 Patch7:     wl-kmod-008_fix_kernel_warnings.patch
 Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
 Patch9:     wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch
+Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -76,6 +77,7 @@ pushd %{name}-%{version}-src
 %patch7  -p1 -b .fix_kernel_warnings
 %patch8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
 %patch9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
+%patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -105,6 +107,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Nov 29 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-15
+- Add patch for kernel >= 4.14 from Olaf Hering - thanks to Tim Thomas
+
 * Thu Aug 31 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 6.30.223.271-14
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
