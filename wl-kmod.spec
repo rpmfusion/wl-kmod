@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    15%{?dist}
+Release:    16%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -27,6 +27,7 @@ Patch7:     wl-kmod-008_fix_kernel_warnings.patch
 Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
 Patch9:     wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch
 Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
+Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -78,6 +79,7 @@ pushd %{name}-%{version}-src
 %patch8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
 %patch9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
 %patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
+%patch11 -p1 -b .kernel_4.15_new_timer
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -107,6 +109,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Feb 15 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-16
+- Add patch for kernel >= 4.15 - fix timer issue - rfbz#4798
+
 * Wed Nov 29 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-15
 - Add patch for kernel >= 4.14 from Olaf Hering - thanks to Tim Thomas
 
