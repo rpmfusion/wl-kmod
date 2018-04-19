@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    17%{?dist}
+Release:    18%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -28,6 +28,7 @@ Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
 Patch9:     wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch
 Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
 Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
+Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -80,6 +81,7 @@ pushd %{name}-%{version}-src
 %patch9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
 %patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
 %patch11 -p1 -b .kernel_4.15_new_timer
+%patch12 -p1 -b .gcc8_fix_bounds_check_warnings
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -109,6 +111,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Apr 17 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-18
+- Add patch for GCC >= 8 - fix strncpy truncation compiler warnings
+
 * Fri Mar 02 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 6.30.223.271-17
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
