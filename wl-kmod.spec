@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    19%{?dist}
+Release:    20%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -111,6 +111,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Aug 19 2018 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-20
+- Rebuilt for Fedora 29 Mass Rebuild binutils issue
+
 * Fri Jul 27 2018 RPM Fusion Release Engineering <sergio@serjux.com> - 6.30.223.271-19
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
