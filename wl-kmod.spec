@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    20%{?dist}
+Release:    21%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -29,6 +29,7 @@ Patch9:     wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch
 Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
 Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
 Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
+Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -44,14 +45,14 @@ BuildRequires:  %{AkmodsBuildRequires}
 %{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
 
 %description
-These packages contain Broadcom's IEEE 802.11a/b/g/n hybrid Linux device 
-driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-, 
-BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-, 
+These packages contain Broadcom's IEEE 802.11a/b/g/n hybrid Linux device
+driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-,
+BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-,
 BCM4331-, BCM4360 and -BCM4352- based hardware.
 
 NOTE: You must read the LICENSE.txt file in the docs directory before using
-this software. You should read the fedora.readme file in the docs directory 
-in order to know how to  configure this software if you encounter problems 
+this software. You should read the fedora.readme file in the docs directory
+in order to know how to  configure this software if you encounter problems
 while boot sequence or with the CFG80211 API (revert to the WEXT API).
 
 %prep
@@ -82,6 +83,7 @@ pushd %{name}-%{version}-src
 %patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
 %patch11 -p1 -b .kernel_4.15_new_timer
 %patch12 -p1 -b .gcc8_fix_bounds_check_warnings
+%patch13 -p1 -b .kernel_read_pos_increment_fix
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -111,6 +113,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Jan 26 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-21
+- Don't increment position if not needed after kernel_read function
+  thanks to Alexander Alexandrovsky
+- wl-kmod.spec remove space at end of line
+
 * Sun Aug 19 2018 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-20
 - Rebuilt for Fedora 29 Mass Rebuild binutils issue
 
