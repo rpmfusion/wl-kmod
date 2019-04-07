@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    22%{?dist}
+Release:    23%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -84,6 +84,146 @@ pushd %{name}-%{version}-src
 %patch11 -p1 -b .kernel_4.15_new_timer
 %patch12 -p1 -b .gcc8_fix_bounds_check_warnings
 %patch13 -p1 -b .kernel_read_pos_increment_fix
+
+# Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
+# Actually works for RHEL 6.x and 7.x
+%if 0%{?rhel} == 6
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "2.6.32"
+  %if %{kvr} >= 71
+   #  Apply to EL 6.0 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 6, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 131
+   #  Apply to EL 6.1 point release and later (2.6.32-131.0.15)
+   #   >  No changes currently needed for EL 6.1 point release
+  %endif
+  %if %{kvr} >= 220
+   #  Apply to EL 6.2 point release and later
+   #   >  No changes currently needed for EL 6.2 point release
+  %endif
+  %if %{kvr} >= 279
+   #  Apply to EL 6.3 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 36)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 37)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 38)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ > KERNEL_VERSION(2, 6, 39)/ > KERNEL_VERSION(2, 6, 31)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 39)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 1, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} == 358
+   #  Only apply to EL 6.4 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 358
+   #  Apply to EL 6.4 point release and later
+   #   >  No changes currently needed for EL 6.4 point release
+  %endif
+  %if %{kvr} == 431
+   #  Only apply to EL 6.5 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 431
+   #  Apply to EL 6.5 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 8, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 9, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} == 504
+   #  Only apply to EL 6.6 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 504
+   #  Apply to EL 6.6 point release and later
+   #   >  No changes currently needed for EL 6.6 point release
+  %endif
+  %if %{kvr} >= 573
+   #  Apply to EL 6.7 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 11, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 16, 0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 18, 0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 15, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 642
+   #  Apply to EL 6.8 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 0, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(4,2,0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 696
+   #  Apply to EL 6.9 point release and later
+   #   >  No changes currently needed for EL 6.9 point release
+  %endif
+  %if %{kvr} >= 754
+   #  Apply to EL 6.10 point release and later
+   #   >  No changes currently needed for EL 6.10 point release
+  %endif
+ %endif
+%endif
+%if 0%{?rhel} == 7
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "3.10.0"
+  %if %{kvr} == 123
+   #  Only apply to EL 7.0 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-rhel70/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 123
+   #  Apply to EL 7.0 point release and later
+   #   >  No changes currently needed for EL 7.0 point release
+  %endif
+  %if %{kvr} >= 229
+   #  Apply to EL 7.1 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 11, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 15, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 16, 0)/ < KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 327
+   #  Apply to EL 7.2 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 18, 0)/ < KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 0, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 514
+   #  Apply to EL 7.3 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(4,2,0)/ < KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 7, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 693
+   #  Apply to EL 7.4 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 8, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 862
+   #  Apply to EL 7.5 point release and later
+   %{__sed} -i 's/ <= KERNEL_VERSION(4, 10, 0)/ <= KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_linux.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 11, 0)/ >= KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(4, 12, 0)/ < KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 12, 0)/ >= KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 957
+   #  Apply to EL 7.6 point release and later
+   #   >  No changes currently needed for EL 7.6 point release
+  %endif
+ %endif
+%endif
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -113,6 +253,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Apr 06 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-23
+- Rework SPEC file in order to build for RHEL 6.x and 7.x
+- Rebuilt for akmods-ostree-post scriptlet
+
 * Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-22
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
