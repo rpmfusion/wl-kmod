@@ -3,34 +3,41 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%global buildforkernels newest
+%global buildforkernels akmod
+%global debug_package %{nil}
 
 Name:       wl-kmod
-Version:    6.30.223.248
-Release:    8%{?dist}.1
+Version:    6.30.223.271
+Release:    23%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
-URL:        https://www.broadcom.com/support/?gid=1
-Source0:    https://www.broadcom.com/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_248.tar.gz
-Source1:    https://www.broadcom.com/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_248.tar.gz
+URL:        https://www.broadcom.com/support/download-search/?pf=Wireless+LAN+Infrastructure
+Source0:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
+Source1:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
-Patch0:     wl-kmod-001_license.patch
-Patch1:     wl-kmod-002_wext_workaround.patch
-Patch2:     wl-kmod-003_kernel_3.8.patch
-Patch3:     wl-kmod-004_kernel_3.15.patch
-Patch4:     wl-kmod-005_gcc_4.9.patch
-Patch5:     wl-kmod-006_kernel_3.16.patch
-Patch6:     wl-kmod-007_kernel_3.17.patch
-Patch7:     wl-kmod-008_kernel_3.18.patch
-Patch8:     wl-kmod-009_kernel_3.18_null_pointer.patch
-Patch9:     wl-kmod-010_kernel_4.0.patch
-
-BuildRequires:  %{_bindir}/kmodtool
+Patch0:     wl-kmod-001_wext_workaround.patch
+Patch1:     wl-kmod-002_kernel_3.18_null_pointer.patch
+Patch2:     wl-kmod-003_gcc_4.9_remove_TIME_DATE_macros.patch
+Patch3:     wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch
+Patch4:     wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch
+Patch5:     wl-kmod-006_gcc_6_fix_indentation_warnings.patch
+Patch6:     wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch
+Patch7:     wl-kmod-008_fix_kernel_warnings.patch
+Patch8:     wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch
+Patch9:     wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch
+Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
+Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
+Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
+Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
 # ppc disabled because broadcom only provides x86 and x86_64 bits
+
+# Get the needed BuildRequires (in parts depending on what we build for)
+%global AkmodsBuildRequires %{_bindir}/kmodtool, elfutils-libelf-devel
+BuildRequires:  %{AkmodsBuildRequires}
 
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
@@ -38,14 +45,14 @@ ExclusiveArch:  i686 x86_64
 %{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
 
 %description
-These packages contain Broadcom's IEEE 802.11a/b/g/n hybrid Linux device 
-driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-, 
-BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-, 
+These packages contain Broadcom's IEEE 802.11a/b/g/n hybrid Linux device
+driver for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-,
+BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-,
 BCM4331-, BCM4360 and -BCM4352- based hardware.
 
 NOTE: You must read the LICENSE.txt file in the docs directory before using
-this software. You should read the fedora.readme file in the docs directory 
-in order to know how to  configure this software if you encounter problems 
+this software. You should read the fedora.readme file in the docs directory
+in order to know how to  configure this software if you encounter problems
 while boot sequence or with the CFG80211 API (revert to the WEXT API).
 
 %prep
@@ -63,16 +70,160 @@ pushd %{name}-%{version}-src
 %else
  tar xzf %{SOURCE1}
 %endif
-%patch0  -p1 -b .license
-%patch1  -p1 -b .wext_workaround.patch
-%patch2  -p1 -b .kernel-3.8
-%patch3  -p1 -b .kernel-3.15
-%patch4  -p1 -b .gcc-4.9
-%patch5  -p1 -b .kernel-3.16
-%patch6  -p1 -b .kernel-3.17
-%patch7  -p1 -b .kernel-3.18
-%patch8  -p1 -b .kernel-3.18_null_pointer
-%patch9  -p1 -b .kernel-4.0
+%patch0  -p1 -b .wext_workaround.patch
+%patch1  -p1 -b .kernel_3.18_null_pointer.patch
+%patch2  -p1 -b .gcc_4.9_remove_TIME_DATE_macros
+%patch3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
+%patch4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
+%patch5  -p1 -b .gcc_6_fix_indentation_warnings
+%patch6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
+%patch7  -p1 -b .fix_kernel_warnings
+%patch8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
+%patch9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
+%patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
+%patch11 -p1 -b .kernel_4.15_new_timer
+%patch12 -p1 -b .gcc8_fix_bounds_check_warnings
+%patch13 -p1 -b .kernel_read_pos_increment_fix
+
+# Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
+# Actually works for RHEL 6.x and 7.x
+%if 0%{?rhel} == 6
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "2.6.32"
+  %if %{kvr} >= 71
+   #  Apply to EL 6.0 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 6, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 131
+   #  Apply to EL 6.1 point release and later (2.6.32-131.0.15)
+   #   >  No changes currently needed for EL 6.1 point release
+  %endif
+  %if %{kvr} >= 220
+   #  Apply to EL 6.2 point release and later
+   #   >  No changes currently needed for EL 6.2 point release
+  %endif
+  %if %{kvr} >= 279
+   #  Apply to EL 6.3 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 36)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 37)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 38)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ > KERNEL_VERSION(2, 6, 39)/ > KERNEL_VERSION(2, 6, 31)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(2, 6, 39)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 1, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} == 358
+   #  Only apply to EL 6.4 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 358
+   #  Apply to EL 6.4 point release and later
+   #   >  No changes currently needed for EL 6.4 point release
+  %endif
+  %if %{kvr} == 431
+   #  Only apply to EL 6.5 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 431
+   #  Apply to EL 6.5 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 8, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 9, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} == 504
+   #  Only apply to EL 6.6 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-current/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 504
+   #  Apply to EL 6.6 point release and later
+   #   >  No changes currently needed for EL 6.6 point release
+  %endif
+  %if %{kvr} >= 573
+   #  Apply to EL 6.7 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 11, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 16, 0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 18, 0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 15, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 642
+   #  Apply to EL 6.8 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 0, 0)/ >= KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(4,2,0)/ < KERNEL_VERSION(2, 6, 32)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 696
+   #  Apply to EL 6.9 point release and later
+   #   >  No changes currently needed for EL 6.9 point release
+  %endif
+  %if %{kvr} >= 754
+   #  Apply to EL 6.10 point release and later
+   #   >  No changes currently needed for EL 6.10 point release
+  %endif
+ %endif
+%endif
+%if 0%{?rhel} == 7
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "3.10.0"
+  %if %{kvr} == 123
+   #  Only apply to EL 7.0 point release
+   if $(grep -q "/lib/modules/kabi/kabi_whitelist" /usr/lib/rpm/redhat/find-requires.ksyms 2>/dev/null) ; then
+    %{__sed} -i 's@/lib/modules/kabi/kabi_whitelist@/lib/modules/kabi-rhel70/kabi_whitelist@g' /usr/lib/rpm/redhat/find-requires.ksyms
+   fi
+  %endif
+  %if %{kvr} >= 123
+   #  Apply to EL 7.0 point release and later
+   #   >  No changes currently needed for EL 7.0 point release
+  %endif
+  %if %{kvr} >= 229
+   #  Apply to EL 7.1 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 11, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(3, 15, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 16, 0)/ < KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 327
+   #  Apply to EL 7.2 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(3, 18, 0)/ < KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 0, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 514
+   #  Apply to EL 7.3 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(4,2,0)/ < KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 7, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 693
+   #  Apply to EL 7.4 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 8, 0)/ >= KERNEL_VERSION(3, 10, 0)/' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 862
+   #  Apply to EL 7.5 point release and later
+   %{__sed} -i 's/ <= KERNEL_VERSION(4, 10, 0)/ <= KERNEL_VERSION(3, 9, 0)/' src/wl/sys/wl_linux.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 11, 0)/ >= KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ < KERNEL_VERSION(4, 12, 0)/ < KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(4, 12, 0)/ >= KERNEL_VERSION(3, 10, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 957
+   #  Apply to EL 7.6 point release and later
+   #   >  No changes currently needed for EL 7.6 point release
+  %endif
+ %endif
+%endif
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -102,7 +253,131 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Wed Jun 10 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.1
+* Sat Apr 06 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-23
+- Rework SPEC file in order to build for RHEL 6.x and 7.x
+- Rebuilt for akmods-ostree-post scriptlet
+
+* Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-22
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Sat Jan 26 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-21
+- Don't increment position if not needed after kernel_read function
+  thanks to Alexander Alexandrovsky
+- wl-kmod.spec remove space at end of line
+
+* Sun Aug 19 2018 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-20
+- Rebuilt for Fedora 29 Mass Rebuild binutils issue
+
+* Fri Jul 27 2018 RPM Fusion Release Engineering <sergio@serjux.com> - 6.30.223.271-19
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Tue Apr 17 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-18
+- Add patch for GCC >= 8 - fix strncpy truncation compiler warnings
+
+* Fri Mar 02 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 6.30.223.271-17
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Feb 15 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-16
+- Add patch for kernel >= 4.15 - fix timer issue - rfbz#4798
+
+* Wed Nov 29 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-15
+- Add patch for kernel >= 4.14 from Olaf Hering - thanks to Tim Thomas
+
+* Thu Aug 31 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 6.30.223.271-14
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Wed Jul 05 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-13
+- Rework patch for kernel >= 4.12 - thanks to Tim Thomas
+
+* Sat Jun 03 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-12
+- Add patch for kernel >= 4.12 - add cfg80211_roam_info struct in wl_bss_roaming_done function
+
+* Wed Apr 12 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-11
+- Add akmod-wl AkmodsBuildRequires and fix package BuildRequires
+
+* Mon Apr 10 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-10
+- Fix build Release tag
+
+* Mon Apr 10 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-9
+- Add patch for kernel >= 4.11 - remove last_rx reference in net_device struct rfbz#4503
+- Add elfutils-libelf-devel to BuildRequires
+
+* Sun Mar 26 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 6.30.223.271-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
+* Wed Feb 08 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-8
+- Add patch to fix kernel warnings - thanks to Adrien Bustany rfbz#4427
+- Updated URLs to new Broadcom WEB site
+
+* Wed Sep 07 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-7
+- Add patch for kernel >= 4.8 - add cfg80211_scan_info struct in cfg80211_scan_done call
+
+* Fri Sep 02 2016 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.271-6
+- Fix 4.7 kernel patch
+
+* Mon Aug 29 2016 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-5
+- Add patch to replace IEEE80211_BAND_x macros with NL80211_BAND_x ones for kernel >= 4.7
+  thanks to Tim Thomas
+- Add patch to fix GCC6 indentation warnings
+
+* Mon Dec 21 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-4
+- Add patch to replace call to rdtscl with call to rdtsc for kernel >= 4.3
+  thanks to Tim Thomas
+
+* Sun Oct 18 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-3
+- Re-add patch to remove __DATE__ and __TIME__ macros for gcc >= 4.9 in order to allow
+  reproducible builds - thanks to Tim Thomas
+
+* Sat Oct 17 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-2
+- Re-add patch for kernel >= 3.18
+
+* Wed Oct 14 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.271-1
+- Upstream update to 6.30.223.271
+- Patches cleaned-up and removed
+
+* Tue Oct 06 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-9.3
+- Rebuilt for kernel
+
+* Wed Sep 23 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-9.2
+- Rebuilt for kernel
+
+* Wed Sep 16 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-9.1
+- Rebuilt for kernel
+
+* Wed Aug 26 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-9
+- Add patch for 4.2 kernel
+
+* Fri Aug 21 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.11
+- Rebuilt for kernel
+
+* Thu Aug 13 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.10
+- Rebuilt for kernel
+
+* Fri Aug 07 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.9
+- Rebuilt for kernel
+
+* Thu Jul 30 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.8
+- Rebuilt for kernel
+
+* Fri Jul 24 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.7
+- Rebuilt for kernel
+
+* Thu Jul 16 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.6
+- Rebuilt for kernel
+
+* Thu Jul 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.5
+- Rebuilt for kernel
+
+* Sun Jun 28 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.4
+- Rebuilt for kernel
+
+* Wed Jun 10 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.3
+- Rebuilt for kernel
+
+* Tue Jun 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.2
+- Rebuilt for kernel
+
+* Sun May 24 2015 Nicolas Chauvet <kwizart@gmail.com> - 6.30.223.248-8.1
 - Rebuilt for kernel
 
 * Wed May 20 2015 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 6.30.223.248-8
