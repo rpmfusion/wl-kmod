@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    23%{?dist}
+Release:    24%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -30,6 +30,7 @@ Patch10:    wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch
 Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
 Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
 Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
+Patch14:    wl-kmod-015_kernel_5.1_get_ds_removed.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -84,6 +85,7 @@ pushd %{name}-%{version}-src
 %patch11 -p1 -b .kernel_4.15_new_timer
 %patch12 -p1 -b .gcc8_fix_bounds_check_warnings
 %patch13 -p1 -b .kernel_read_pos_increment_fix
+%patch14 -p1 -b .kernel_5.1_get_ds_removed
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -253,6 +255,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Apr 14 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-24
+- Add patch for kernel >= 5.1.x - get_ds function removed
+
 * Sat Apr 06 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-23
 - Rework SPEC file in order to build for RHEL 6.x and 7.x
 - Rebuilt for akmods-ostree-post scriptlet
