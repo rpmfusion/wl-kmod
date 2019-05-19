@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    24%{?dist}
+Release:    25%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -31,6 +31,7 @@ Patch11:    wl-kmod-012_kernel_4.15_new_timer.patch
 Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
 Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
 Patch14:    wl-kmod-015_kernel_5.1_get_ds_removed.patch
+Patch15:    wl-kmod-016_fix_unsupported_mesh_point.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -86,6 +87,7 @@ pushd %{name}-%{version}-src
 %patch12 -p1 -b .gcc8_fix_bounds_check_warnings
 %patch13 -p1 -b .kernel_read_pos_increment_fix
 %patch14 -p1 -b .kernel_5.1_get_ds_removed
+%patch15 -p1 -b .fix_unsupported_mesh_point
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -255,6 +257,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun May 19 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-25
+- Add patch for f30 new wpa_supplicant - fix unsupported mesh point RHBZ#1703745
+
 * Sun Apr 14 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-24
 - Add patch for kernel >= 5.1.x - get_ds function removed
 
