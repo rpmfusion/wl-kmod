@@ -8,7 +8,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    25%{?dist}
+Release:    26%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -257,6 +257,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Jun 01 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-26
+- Fix patch for kernel >= 5.1.x - get_ds function removed even for WEXT
+
 * Sun May 19 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-25
 - Add patch for f30 new wpa_supplicant - fix unsupported mesh point RHBZ#1703745
 
