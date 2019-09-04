@@ -3,12 +3,14 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
+%if 0%{?fedora}
 %global buildforkernels akmod
 %global debug_package %{nil}
+%endif
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    27%{?dist}
+Release:    28%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -257,6 +259,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Sep 04 2019 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.271-28
+- Rebuild for new el7 kernel and generate kmod package
+
 * Sat Aug 10 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-27
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
