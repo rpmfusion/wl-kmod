@@ -230,6 +230,27 @@ pushd %{name}-%{version}-src
   %endif
  %endif
 %endif
+%if 0%{?rhel} == 8
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "4.18.0"
+  %if %{kvr} == 80
+   #  Only apply to EL 8.0 point release
+   #   >  No changes currently needed for EL 8.0 point release
+   fi
+  %endif
+  %if %{kvr} >= 80
+   #  Apply to EL 8.0 point release and later
+   #   >  No changes currently needed for EL 8.0 point release
+  %endif
+ %endif
+%endif
 popd
 
 for kernel_version in %{?kernel_versions} ; do
