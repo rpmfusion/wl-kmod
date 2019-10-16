@@ -10,11 +10,11 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    28%{?dist}
+Release:    30%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
-URL:        https://www.broadcom.com/support/download-search/?pf=Wireless+LAN+Infrastructure
+URL:        https://www.broadcom.com/support/download-search?pg=&pf=Wireless+LAN/Bluetooth+Combo
 Source0:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
 Source1:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
@@ -34,6 +34,7 @@ Patch12:    wl-kmod-013_gcc8_fix_bounds_check_warnings.patch
 Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
 Patch14:    wl-kmod-015_kernel_5.1_get_ds_removed.patch
 Patch15:    wl-kmod-016_fix_unsupported_mesh_point.patch
+Patch16:    wl-kmod-017_fix_gcc_fallthrough_warning.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -90,6 +91,7 @@ pushd %{name}-%{version}-src
 %patch13 -p1 -b .kernel_read_pos_increment_fix
 %patch14 -p1 -b .kernel_5.1_get_ds_removed
 %patch15 -p1 -b .fix_unsupported_mesh_point
+%patch16 -p1 -b .fix_gcc_fallthrough_warning.patch
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -230,6 +232,26 @@ pushd %{name}-%{version}-src
   %endif
  %endif
 %endif
+%if 0%{?rhel} == 8
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "4.18.0"
+  %if %{kvr} == 80
+   #  Only apply to EL 8.0 point release
+   #   >  No changes currently needed for EL 8.0 point release
+  %endif
+  %if %{kvr} >= 80
+   #  Apply to EL 8.0 point release and later
+   #   >  No changes currently needed for EL 8.0 point release
+  %endif
+ %endif
+%endif
 popd
 
 for kernel_version in %{?kernel_versions} ; do
@@ -259,6 +281,15 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Oct 16 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-30
+- Fix typo in spec file for RHEL 8.x
+- Add patch to fix gcc fallthrough warning
+- Updated URLs to new Broadcom WEB site
+
+* Tue Sep 24 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-29
+- Reworked patch to workaround RHBZ#1703745 and RFBZ#5245
+- Rework SPEC file in order to build for RHEL 8.x
+
 * Wed Sep 04 2019 Leigh Scott <leigh123linux@googlemail.com> - 6.30.223.271-28
 - Rebuild for new el7 kernel and generate kmod package
 
