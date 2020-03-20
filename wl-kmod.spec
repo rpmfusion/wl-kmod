@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    30%{?dist}
+Release:    32%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -35,6 +35,7 @@ Patch13:    wl-kmod-014_kernel_read_pos_increment_fix.patch
 Patch14:    wl-kmod-015_kernel_5.1_get_ds_removed.patch
 Patch15:    wl-kmod-016_fix_unsupported_mesh_point.patch
 Patch16:    wl-kmod-017_fix_gcc_fallthrough_warning.patch
+Patch17:    wl-kmod-018_kernel_5.6_adaptations.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -44,7 +45,7 @@ ExclusiveArch:  i686 x86_64
 %global AkmodsBuildRequires %{_bindir}/kmodtool, elfutils-libelf-devel
 BuildRequires:  %{AkmodsBuildRequires}
 
-%{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
+%{!?kernels:BuildRequires: gcc, elfutils-libelf-devel, buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
 # kmodtool does its magic here
 %{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
@@ -92,6 +93,7 @@ pushd %{name}-%{version}-src
 %patch14 -p1 -b .kernel_5.1_get_ds_removed
 %patch15 -p1 -b .fix_unsupported_mesh_point
 %patch16 -p1 -b .fix_gcc_fallthrough_warning.patch
+%patch17 -p1 -b .kernel_5.6_adaptations.patch
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -281,6 +283,12 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Mar 19 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-32
+- Add patch for kernel >= 5.6 - fixes RFBZ#5565
+
+* Wed Feb 05 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-31
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Wed Oct 16 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-30
 - Fix typo in spec file for RHEL 8.x
 - Add patch to fix gcc fallthrough warning
