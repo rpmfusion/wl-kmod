@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    33%{?dist}
+Release:    34%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -36,6 +36,7 @@ Patch14:    wl-kmod-015_kernel_5.1_get_ds_removed.patch
 Patch15:    wl-kmod-016_fix_unsupported_mesh_point.patch
 Patch16:    wl-kmod-017_fix_gcc_fallthrough_warning.patch
 Patch17:    wl-kmod-018_kernel_5.6_adaptations.patch
+Patch18:    wl-kmod-019_kernel_5.9_segment_eq_removed.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -94,6 +95,7 @@ pushd %{name}-%{version}-src
 %patch15 -p1 -b .fix_unsupported_mesh_point
 %patch16 -p1 -b .fix_gcc_fallthrough_warning.patch
 %patch17 -p1 -b .kernel_5.6_adaptations.patch
+%patch18 -p1 -b .kernel_5.9_segment_eq_removed
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -283,6 +285,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Nov 11 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-34
+- Add patch for kernel >= 5.9 - fixes RFBZ#5835
+
 * Wed Aug 19 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-33
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
