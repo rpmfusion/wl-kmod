@@ -1,0 +1,93 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c	2019-10-16 16:33:57.319456000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c	2020-11-12 14:33:56.075438464 +0100
+@@ -477,7 +477,9 @@
+ {
+ 	struct ifreq ifr;
+ 	struct wl_ioctl ioc;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	mm_segment_t fs;
++#endif
+ 	s32 err = 0;
+ 
+ 	BUG_ON(len < sizeof(int));
+@@ -489,18 +491,22 @@
+ 	strcpy(ifr.ifr_name, dev->name);
+ 	ifr.ifr_data = (caddr_t)&ioc;
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	fs = get_fs();
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+ 	set_fs(KERNEL_DS);
+ #else
+ 	set_fs(get_ds());
+ #endif
++#endif
+ #if defined(WL_USE_NETDEV_OPS)
+ 	err = dev->netdev_ops->ndo_do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #else
+ 	err = dev->do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #endif
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	set_fs(fs);
++#endif
+ 
+ 	return err;
+ }
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_iw.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_iw.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_iw.c	2019-05-30 01:32:34.421426000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_iw.c	2020-11-12 14:33:56.101438714 +0100
+@@ -105,7 +105,9 @@
+ {
+ 	struct ifreq ifr;
+ 	wl_ioctl_t ioc;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	mm_segment_t fs;
++#endif
+ 	int ret;
+ 
+ 	memset(&ioc, 0, sizeof(ioc));
+@@ -116,18 +118,22 @@
+ 	strcpy(ifr.ifr_name, dev->name);
+ 	ifr.ifr_data = (caddr_t) &ioc;
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	fs = get_fs();
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+ 	set_fs(KERNEL_DS);
+ #else
+ 	set_fs(get_ds());
+ #endif
++#endif
+ #if defined(WL_USE_NETDEV_OPS)
+ 	ret = dev->netdev_ops->ndo_do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #else
+ 	ret = dev->do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #endif
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ 	set_fs(fs);
++#endif
+ 
+ 	return ret;
+ }
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_linux.c	2020-11-11 13:39:00.579562572 +0100
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_linux.c	2020-11-11 23:14:57.451165706 +0100
+@@ -1659,6 +1659,7 @@
+ 		goto done2;
+ 	}
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
+ 	if (uaccess_kernel())
+ #else
+@@ -1667,6 +1668,9 @@
+ 		buf = ioc.buf;
+ 
+ 	else if (ioc.buf) {
++#else
++	if (ioc.buf) {
++#endif
+ 		if (!(buf = (void *) MALLOC(wl->osh, MAX(ioc.len, WLC_IOCTL_MAXLEN)))) {
+ 			bcmerror = BCME_NORESOURCE;
+ 			goto done2;

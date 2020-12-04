@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    34%{?dist}
+Release:    35%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -37,6 +37,7 @@ Patch15:    wl-kmod-016_fix_unsupported_mesh_point.patch
 Patch16:    wl-kmod-017_fix_gcc_fallthrough_warning.patch
 Patch17:    wl-kmod-018_kernel_5.6_adaptations.patch
 Patch18:    wl-kmod-019_kernel_5.9_segment_eq_removed.patch
+Patch19:    wl-kmod-020_kernel_5.10_get_set_fs_removed.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -96,6 +97,7 @@ pushd %{name}-%{version}-src
 %patch16 -p1 -b .fix_gcc_fallthrough_warning.patch
 %patch17 -p1 -b .kernel_5.6_adaptations.patch
 %patch18 -p1 -b .kernel_5.9_segment_eq_removed
+%patch19 -p1 -b .kernel_5.10_get_set_fs_removed
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -285,6 +287,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sat Nov 28 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-35
+- Add patch for kernel >= 5.10 - get_fs and set_fs macros removed - first attempt
+
 * Wed Nov 11 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-34
 - Add patch for kernel >= 5.9 - fixes RFBZ#5835
 
