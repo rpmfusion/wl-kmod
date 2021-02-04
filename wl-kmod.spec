@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    36%{?dist}
+Release:    37%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -287,6 +287,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Feb 04 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-37
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Tue Dec 29 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-36
 - Reworked patch for kernel >= 5.10 - get_fs and set_fs macros removed
   Thanks to Joan Bruguera - https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
