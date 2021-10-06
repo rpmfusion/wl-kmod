@@ -5,7 +5,7 @@ diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_
  		break;
  	case NL80211_AUTHTYPE_NETWORK_EAP:
  		WL_DBG(("network eap\n"));
-+		// fall through
++		__attribute__((__fallthrough__)); /* [[fallthrough]]; falls through */
  	default:
  		val = 2;
  		WL_ERR(("invalid auth type (%d)\n", sme->auth_type));

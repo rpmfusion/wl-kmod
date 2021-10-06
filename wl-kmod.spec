@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    38%{?dist}
+Release:    39%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -287,6 +287,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Oct 03 2021 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-39
+- Fix gcc falls through warnings - reworked wl-kmod-017_fix_gcc_fallthrough_warning.patch
+
 * Wed Aug 04 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 6.30.223.271-38
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
