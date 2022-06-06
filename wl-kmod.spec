@@ -10,11 +10,11 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    41%{?dist}
+Release:    42%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
-URL:        https://www.broadcom.com/support/download-search?pg=&pf=Wireless+LAN/Bluetooth+Combo
+URL:        https://www.broadcom.com/support/download-search?pg=Legacy+Products&pf=Legacy+Wireless&pn=&pa=&po=&dk=&pl=
 Source0:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35-nodebug-pcoem-6_30_223_271.tar.gz
 Source1:    https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz
 Source11:   wl-kmod-kmodtool-excludekernel-filterfile
@@ -39,6 +39,7 @@ Patch17:    wl-kmod-018_kernel_5.6_adaptations.patch
 Patch18:    wl-kmod-019_kernel_5.9_segment_eq_removed.patch
 Patch19:    wl-kmod-020_kernel_5.10_get_set_fs_removed.patch
 Patch20:    wl-kmod-021_kernel_5.17_adaptation.patch
+Patch21:    wl-kmod-022_kernel_5.18_adaptation.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -100,6 +101,7 @@ pushd %{name}-%{version}-src
 %patch18 -p1 -b .kernel_5.9_segment_eq_removed
 %patch19 -p1 -b .kernel_5.10_get_set_fs_removed
 %patch20 -p1 -b .kernel_5.17_adaptation
+%patch21 -p1 -b .kernel_5.18_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -238,6 +240,18 @@ pushd %{name}-%{version}-src
    #  Apply to EL 7.6 point release and later
    #   >  No changes currently needed for EL 7.6 point release
   %endif
+  %if %{kvr} >= 1062
+   #  Apply to EL 7.7 point release and later
+   %{__sed} -i -e 's@__attribute__((__fallthrough__));.*@/* fall through */@g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 1127
+   #  Apply to EL 7.8 point release and later
+   #   >  No changes currently needed for EL 7.8 point release
+  %endif
+  %if %{kvr} >= 1160
+   #  Apply to EL 7.9 point release and later
+   #   >  No changes currently needed for EL 7.9 point release
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 8
@@ -257,6 +271,46 @@ pushd %{name}-%{version}-src
   %if %{kvr} >= 80
    #  Apply to EL 8.0 point release and later
    #   >  No changes currently needed for EL 8.0 point release
+  %endif
+  %if %{kvr} >= 147
+   #  Apply to EL 8.1 point release and later
+   #   >  No changes currently needed for EL 8.1 point release
+  %endif
+  %if %{kvr} >= 193
+   #  Apply to EL 8.2 point release and later
+   #   >  No changes currently needed for EL 8.2 point release
+  %endif
+  %if %{kvr} >= 240
+   #  Apply to EL 8.3 point release and later
+   #   >  No changes currently needed for EL 8.3 point release
+  %endif
+  %if %{kvr} >= 305
+   #  Apply to EL 8.4 point release and later
+   #   >  No changes currently needed for EL 8.4 point release
+  %endif
+  %if %{kvr} >= 348
+   #  Apply to EL 8.5 point release and later
+   #   >  No changes currently needed for EL 8.5 point release
+  %endif
+ %endif
+%endif
+%if 0%{?rhel} == 9
+ # Define kvl (linux) & kvr (release) for use in "patching" logical
+ %define kvl %(echo %{kernel_versions} | cut -d"-" -f1)
+ %define kvr %(echo %{kernel_versions} | cut -d"-" -f2 | cut -d"." -f1)
+
+ # Perform "patching" edits to the src/wl/sys/wl_cfg80211_hybrid.c file.
+ #  Note: Using this method, as opposed to making a patch, allows
+ #        the src.rpm to be compiled under various point release kernels.
+ #  Note: Use [ >][>=] where both >= & > are present
+ %if "%{kvl}" == "5.14.0"
+  %if %{kvr} == 70
+   #  Only apply to EL 9.0 point release
+   #   >  No changes currently needed for EL 9.0 point release
+  %endif
+  %if %{kvr} >= 70
+    #  Apply to EL 9.0 point release and later
+   #   >  No changes currently needed for EL 9.0 point release
   %endif
  %endif
 %endif
@@ -289,6 +343,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Jun 06  2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-42
+- Reworked SPEC file to build for RHEL 7.x, RHEL 8.x and RHEL 9.x
+- Updated URLs to new Broadcom WEB site
+- Add patch for kernel >= 5.18
+
 * Fri Apr 01 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-41
 - Add patch for kernel >= 5.17 - fixes RFBZ#6260
 
