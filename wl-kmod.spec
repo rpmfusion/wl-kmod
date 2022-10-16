@@ -3,7 +3,7 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 9
 %global buildforkernels akmod
 %global debug_package %{nil}
 %endif
@@ -311,8 +311,9 @@ pushd %{name}-%{version}-src
    #   >  No changes currently needed for EL 9.0 point release
   %endif
   %if %{kvr} >= 70
-    #  Apply to EL 9.0 point release and later
-   #   >  No changes currently needed for EL 9.0 point release
+   #  Apply to EL 9.0 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(5, 17, 0)/ < KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_iw.h
+   %{__sed} -i 's/ >= KERNEL_VERSION(5, 17, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_linux.c
   %endif
  %endif
 %endif
@@ -347,6 +348,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sun Oct 16 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-44
 - Add patch for kernel >= 6.0
+- Fix SPEC file for RHEL 9.x
 
 * Mon Aug 08 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 6.30.223.271-43
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild and ffmpeg
