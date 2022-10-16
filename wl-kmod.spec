@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    44%{?dist}
+Release:    45%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -346,6 +346,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Oct 17 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-45
+- Fix patch for kernel >= 6.0
+
 * Sun Oct 16 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-44
 - Add patch for kernel >= 6.0
 - Fix SPEC file for RHEL 9.x
