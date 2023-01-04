@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    45%{?dist}
+Release:    46%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -41,6 +41,7 @@ Patch19:    wl-kmod-020_kernel_5.10_get_set_fs_removed.patch
 Patch20:    wl-kmod-021_kernel_5.17_adaptation.patch
 Patch21:    wl-kmod-022_kernel_5.18_adaptation.patch
 Patch22:    wl-kmod-023_kernel_6.0_adaptation.patch
+Patch23:    wl-kmod-024_kernel_6.1_adaptation.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -104,6 +105,7 @@ pushd %{name}-%{version}-src
 %patch20 -p1 -b .kernel_5.17_adaptation
 %patch21 -p1 -b .kernel_5.18_adaptation
 %patch22 -p1 -b .kernel_6.0_adaptation
+%patch23 -p1 -b .kernel_6.1_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -342,10 +344,11 @@ done
 chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %changelog
+* Tue Jan 03 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-46
+- Add patch for kernel >= 6.1
+- Remove spec file clean section - rpmlint error
+
 * Mon Oct 17 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-45
 - Fix patch for kernel >= 6.0
 
