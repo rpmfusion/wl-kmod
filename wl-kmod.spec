@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    46%{?dist}
+Release:    49%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -42,6 +42,7 @@ Patch20:    wl-kmod-021_kernel_5.17_adaptation.patch
 Patch21:    wl-kmod-022_kernel_5.18_adaptation.patch
 Patch22:    wl-kmod-023_kernel_6.0_adaptation.patch
 Patch23:    wl-kmod-024_kernel_6.1_adaptation.patch
+Patch24:    wl-kmod-025_kernel_6.5_adaptation.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -82,30 +83,31 @@ pushd %{name}-%{version}-src
 %else
  tar xzf %{SOURCE1}
 %endif
-%patch0  -p1 -b .wext_workaround.patch
-%patch1  -p1 -b .kernel_3.18_null_pointer.patch
-%patch2  -p1 -b .gcc_4.9_remove_TIME_DATE_macros
-%patch3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
-%patch4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
-%patch5  -p1 -b .gcc_6_fix_indentation_warnings
-%patch6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
-%patch7  -p1 -b .fix_kernel_warnings
-%patch8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
-%patch9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
-%patch10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
-%patch11 -p1 -b .kernel_4.15_new_timer
-%patch12 -p1 -b .gcc8_fix_bounds_check_warnings
-%patch13 -p1 -b .kernel_read_pos_increment_fix
-%patch14 -p1 -b .kernel_5.1_get_ds_removed
-%patch15 -p1 -b .fix_unsupported_mesh_point
-%patch16 -p1 -b .fix_gcc_fallthrough_warning.patch
-%patch17 -p1 -b .kernel_5.6_adaptations.patch
-%patch18 -p1 -b .kernel_5.9_segment_eq_removed
-%patch19 -p1 -b .kernel_5.10_get_set_fs_removed
-%patch20 -p1 -b .kernel_5.17_adaptation
-%patch21 -p1 -b .kernel_5.18_adaptation
-%patch22 -p1 -b .kernel_6.0_adaptation
-%patch23 -p1 -b .kernel_6.1_adaptation
+%patch -P 0  -p1 -b .wext_workaround.patch
+%patch -P 1  -p1 -b .kernel_3.18_null_pointer.patch
+%patch -P 2  -p1 -b .gcc_4.9_remove_TIME_DATE_macros
+%patch -P 3  -p1 -b .kernel_4.3_rdtscl_to_rdtsc.patch
+%patch -P 4  -p1 -b .kernel_4.7_IEEE80211_BAND_to_NL80211_BAND
+%patch -P 5  -p1 -b .gcc_6_fix_indentation_warnings
+%patch -P 6  -p1 -b .kernel_4.8_add_cfg80211_scan_info_struct
+%patch -P 7  -p1 -b .fix_kernel_warnings
+%patch -P 8  -p1 -b .kernel_4.11_remove_last_rx_in_net_device_struct
+%patch -P 9  -p1 -b .kernel_4.12_add_cfg80211_roam_info_struct
+%patch -P 10 -p1 -b .kernel_4.14_new_kernel_read_function_prototype
+%patch -P 11 -p1 -b .kernel_4.15_new_timer
+%patch -P 12 -p1 -b .gcc8_fix_bounds_check_warnings
+%patch -P 13 -p1 -b .kernel_read_pos_increment_fix
+%patch -P 14 -p1 -b .kernel_5.1_get_ds_removed
+%patch -P 15 -p1 -b .fix_unsupported_mesh_point
+%patch -P 16 -p1 -b .fix_gcc_fallthrough_warning.patch
+%patch -P 17 -p1 -b .kernel_5.6_adaptations.patch
+%patch -P 18 -p1 -b .kernel_5.9_segment_eq_removed
+%patch -P 19 -p1 -b .kernel_5.10_get_set_fs_removed
+%patch -P 20 -p1 -b .kernel_5.17_adaptation
+%patch -P 21 -p1 -b .kernel_5.18_adaptation
+%patch -P 22 -p1 -b .kernel_6.0_adaptation
+%patch -P 23 -p1 -b .kernel_6.1_adaptation
+%patch -P 24 -p1 -b .kernel_6.5_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
@@ -296,6 +298,19 @@ pushd %{name}-%{version}-src
    #  Apply to EL 8.5 point release and later
    #   >  No changes currently needed for EL 8.5 point release
   %endif
+  %if %{kvr} >= 372
+   #  Apply to EL 8.6 point release and later
+   #   >  No changes currently needed for EL 8.6 point release
+  %endif
+  %if %{kvr} >= 425
+   #  Apply to EL 8.7 point release and later
+   #   >  No changes currently needed for EL 8.7 point release
+  %endif
+  %if %{kvr} >= 477
+   #  Apply to EL 8.8 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(6, 0, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(6, 1, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 9
@@ -316,6 +331,14 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.0 point release and later
    %{__sed} -i  's/ < KERNEL_VERSION(5, 17, 0)/ < KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_iw.h
    %{__sed} -i 's/ >= KERNEL_VERSION(5, 17, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_linux.c
+  %endif
+  %if %{kvr} >= 162
+   #  Apply to EL 9.1 point release and later
+   #   >  No changes currently needed for EL 9.1 point release
+  %endif
+  %if %{kvr} >= 284
+   #  Apply to EL 9.2 point release and later
+   #   >  No changes currently needed for EL 9.2 point release
   %endif
  %endif
 %endif
@@ -345,6 +368,18 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-49
+- Spec fix build release tag
+- Fix SPEC file for RHEL 9.x and RHEL 8.x
+
+* Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-48
+- Spec file clean-up - Fix patchN macro is deprecated
+- Add patch for kernel >= 6.5
+  Based loosely on https://gist.github.com/joanbm/9cd5fda1dcfab9a67b42cc6195b7b269 by Joan Bruguera
+
+* Thu Aug 03 2023 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 6.30.223.271-47
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
 * Tue Jan 03 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-46
 - Add patch for kernel >= 6.1
 - Remove spec file clean section - rpmlint error
