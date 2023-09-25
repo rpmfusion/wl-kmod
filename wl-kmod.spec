@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    48%{?dist}
+Release:    49%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -298,6 +298,19 @@ pushd %{name}-%{version}-src
    #  Apply to EL 8.5 point release and later
    #   >  No changes currently needed for EL 8.5 point release
   %endif
+  %if %{kvr} >= 372
+   #  Apply to EL 8.6 point release and later
+   #   >  No changes currently needed for EL 8.6 point release
+  %endif
+  %if %{kvr} >= 425
+   #  Apply to EL 8.7 point release and later
+   #   >  No changes currently needed for EL 8.7 point release
+  %endif
+  %if %{kvr} >= 477
+   #  Apply to EL 8.8 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(6, 0, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(6, 1, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 9
@@ -318,6 +331,14 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.0 point release and later
    %{__sed} -i  's/ < KERNEL_VERSION(5, 17, 0)/ < KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_iw.h
    %{__sed} -i 's/ >= KERNEL_VERSION(5, 17, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_linux.c
+  %endif
+  %if %{kvr} >= 162
+   #  Apply to EL 9.1 point release and later
+   #   >  No changes currently needed for EL 9.1 point release
+  %endif
+  %if %{kvr} >= 284
+   #  Apply to EL 9.2 point release and later
+   #   >  No changes currently needed for EL 9.2 point release
   %endif
  %endif
 %endif
@@ -347,7 +368,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
-* Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-47
+* Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-49
+- Spec fix build release tag
+- Fix SPEC file for RHEL 9.x and RHEL 8.x
+
+* Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-48
 - Spec file clean-up - Fix patchN macro is deprecated
 - Add patch for kernel >= 6.5
   Based loosely on https://gist.github.com/joanbm/9cd5fda1dcfab9a67b42cc6195b7b269 by Joan Bruguera
