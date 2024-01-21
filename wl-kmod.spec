@@ -10,7 +10,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    49%{?dist}
+Release:    50%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -311,6 +311,10 @@ pushd %{name}-%{version}-src
    %{__sed} -i 's/ >= KERNEL_VERSION(6, 0, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
    %{__sed} -i 's/ >= KERNEL_VERSION(6, 1, 0)/ >= KERNEL_VERSION(4, 18, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
+  %if %{kvr} >= 513
+   #  Apply to EL 8.9 point release and later
+   #   >  No changes currently needed for EL 8.9 point release
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 9
@@ -340,6 +344,10 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.2 point release and later
    #   >  No changes currently needed for EL 9.2 point release
   %endif
+  %if %{kvr} >= 362
+   #  Apply to EL 9.3 point release and later
+   %{__sed} -i 's/ >= KERNEL_VERSION(6, [01], 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 popd
@@ -368,6 +376,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Sun Jan 21 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-50
+- Fix SPEC file for RHEL 9.x and RHEL 8.x - RFBZ#6937
+
 * Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-49
 - Spec fix build release tag
 - Fix SPEC file for RHEL 9.x and RHEL 8.x
