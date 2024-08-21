@@ -43,6 +43,7 @@ Patch21:    wl-kmod-022_kernel_5.18_adaptation.patch
 Patch22:    wl-kmod-023_kernel_6.0_adaptation.patch
 Patch23:    wl-kmod-024_kernel_6.1_adaptation.patch
 Patch24:    wl-kmod-025_kernel_6.5_adaptation.patch
+Patch25:    wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -108,6 +109,7 @@ pushd %{name}-%{version}-src
 %patch -P 22 -p1 -b .kernel_6.0_adaptation
 %patch -P 23 -p1 -b .kernel_6.1_adaptation
 %patch -P 24 -p1 -b .kernel_6.5_adaptation
+%patch -P 25 -p1 -b .kernel_6.10_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
