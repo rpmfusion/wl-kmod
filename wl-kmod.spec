@@ -4,9 +4,15 @@
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
 %if 0%{?fedora} || 0%{?rhel} >= 9
+%bcond_with kmod
+
+%if %{with kmod}
+%global buildforkernels current
+%else
 %global buildforkernels akmod
-%global debug_package %{nil}
 %endif
+%endif
+%global debug_package %{nil}
 
 Name:       wl-kmod
 Version:    6.30.223.271
