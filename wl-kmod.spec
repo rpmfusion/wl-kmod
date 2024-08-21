@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    52%{?dist}
+Release:    53%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -386,6 +386,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Thu Aug 22 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-53
+- Fix warning empty body in if statement - kernel 6.10
+- Add max_scan_ie_len in order to make wpa_supplicant 2.11 scans not to fail - RFBZ#7030
+- SPEC file add bcond to build for current kernel and akmod
+
 * Sat Aug 03 2024 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 6.30.223.271-52
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
