@@ -51,6 +51,7 @@ Patch23:    wl-kmod-024_kernel_6.1_adaptation.patch
 Patch24:    wl-kmod-025_kernel_6.5_adaptation.patch
 Patch25:    wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch
 Patch26:    wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch
+Patch27:    wl-kmod-028_kernel_6.12_adaptation.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -118,6 +119,7 @@ pushd %{name}-%{version}-src
 %patch -P 24 -p1 -b .kernel_6.5_adaptation
 %patch -P 25 -p1 -b .kernel_6.10_adaptation
 %patch -P 26 -p1 -b .wpa_supplicant-2.11_adaptation
+%patch -P 27 -p1 -b .kernel_6.12_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
