@@ -406,7 +406,7 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
 
 * Sun Jan 21 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-50
-- Fix SPEC file for RHEL 9.x and RHEL 8.x - RFBZ#6937
+- Fix SPEC file for RHEL 9.x and RHEL 8.x - RFBZ#6837
 
 * Mon Sep 25 2023 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-49
 - Spec fix build release tag
