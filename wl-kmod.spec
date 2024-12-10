@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    53%{?dist}
+Release:    54%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -396,6 +396,11 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Tue Dec 10 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-54
+- Add last kernel version release for RHEL 9.x and RHEL 8.x
+- Fix SPEC file RFBZ ref
+- Add patch for kernel >= 6.12 - RFBZ#7130
+
 * Thu Aug 22 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-53
 - Fix warning empty body in if statement - kernel 6.10
 - Add max_scan_ie_len in order to make wpa_supplicant 2.11 scans not to fail - RFBZ#7030
