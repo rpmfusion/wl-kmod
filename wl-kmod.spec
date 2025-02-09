@@ -368,6 +368,10 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.4 point release and later
    #   >  No changes currently needed for EL 9.4 point release
   %endif
+  %if %{kvr} >= 503
+   #  Apply to EL 9.5 point release and later
+   #   >  No changes currently needed for EL 9.5 point release
+  %endif
  %endif
 %endif
 popd
