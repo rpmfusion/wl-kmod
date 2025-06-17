@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    56%{?dist}
+Release:    57%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -447,6 +447,18 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Tue Jun 17 2025 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-57
+- makefile: replace EXTRA_CFLAGS and EXTRA_LDFLAGS with ccflags-y and ldflags-y
+- Add MODULE_DESCRIPTION macro
+- Disable objtool and added CVE warning to description in SPEC file
+- Important warning: this module has reached the end of support from Broadcom.
+  It is therefore exposed to Common Vulnerabilities and Exposures (CVE).
+  More information on the concerned CVE could be obtained here:
+  https://www.cve.org/CVERecord/SearchResults?query=broadcom+wl+WiFi+driver
+- Add last kernel version release for RHEL 9.x
+- Fix SPEC file for RHEL 10.x
+- Add patch for kernel >= 6.15 - RFBZ#7258
+
 * Sun Feb 09 2025 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-56
 - Add last kernel version release for RHEL 9.x
 - Add patch for kernel >= 6.13
