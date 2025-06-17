@@ -55,6 +55,7 @@ Patch27:    wl-kmod-028_kernel_6.12_adaptation.patch
 Patch28:    wl-kmod-029_kernel_6.13_adaptation.patch
 Patch29:    wl-kmod-030_kernel_6.14_adaptation.patch
 Patch30:    wl-kmod-031_replace_EXTRA_CFLAGS_EXTRA_LDFLAGS_with_ccflags-y_ldflags-y.patch
+Patch31:    wl-kmod-032_add_MODULE_DESCRIPTION_macro.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -126,6 +127,7 @@ pushd %{name}-%{version}-src
 %patch -P 28 -p1 -b .kernel_6.13_adaptation
 %patch -P 29 -p1 -b .kernel_6.14_adaptation
 %patch -P 30 -p1 -b .EXTRA_CFLAGS_EXTRA_LDFLAGS
+%patch -P 31 -p1 -b .MODULE_DESCRIPTION
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
