@@ -56,6 +56,7 @@ Patch28:    wl-kmod-029_kernel_6.13_adaptation.patch
 Patch29:    wl-kmod-030_kernel_6.14_adaptation.patch
 Patch30:    wl-kmod-031_replace_EXTRA_CFLAGS_EXTRA_LDFLAGS_with_ccflags-y_ldflags-y.patch
 Patch31:    wl-kmod-032_add_MODULE_DESCRIPTION_macro.patch
+Patch32:    wl-kmod-033_disable_objtool_add_warning_unmaintained.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -80,6 +81,11 @@ NOTE: You must read the LICENSE.txt file in the docs directory before using
 this software. You should read the fedora.readme file in the docs directory
 in order to know how to  configure this software if you encounter problems
 while boot sequence or with the CFG80211 API (revert to the WEXT API).
+
+Important warning: this module has reached the end of support from Broadcom.
+It is therefore exposed to Common Vulnerabilities and Exposures (CVE).
+More information on the concerned CVE could be obtained here:
+https://www.cve.org/CVERecord/SearchResults?query=broadcom+wl+WiFi+driver
 
 %prep
 # error out if there was something wrong with kmodtool
@@ -128,6 +134,7 @@ pushd %{name}-%{version}-src
 %patch -P 29 -p1 -b .kernel_6.14_adaptation
 %patch -P 30 -p1 -b .EXTRA_CFLAGS_EXTRA_LDFLAGS
 %patch -P 31 -p1 -b .MODULE_DESCRIPTION
+%patch -P 32 -p1 -b .disable_objtool
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
