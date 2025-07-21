@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    57%{?dist}
+Release:    58%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -417,7 +417,6 @@ pushd %{name}-%{version}-src
   %if %{kvr} >= 55
    #  Apply to EL 10.0 point release and later
    %{__sed} -i  's/ < KERNEL_VERSION(6, 13, 0)/ < KERNEL_VERSION(6, 12, 0)/g' src/include/linuxver.h
-   %{__sed} -i  's/ >= KERNEL_VERSION(6, 14, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
  %endif
 %endif
@@ -447,6 +446,9 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Mon Jul 21 2025 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-58
+- Fix manual patching for RHEL 10
+
 * Tue Jun 17 2025 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-57
 - makefile: replace EXTRA_CFLAGS and EXTRA_LDFLAGS with ccflags-y and ldflags-y
 - Add MODULE_DESCRIPTION macro
