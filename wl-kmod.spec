@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    60%{?dist}
+Release:    61%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -453,6 +453,10 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Tue Feb 24 2026 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-61
+- Add last kernel version release for RHEL 9.x
+- Fix tentative to build for last kernel version release RHEL 10.x - RFBZ#7389
+
 * Mon Feb 02 2026 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 6.30.223.271-60
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
