@@ -395,10 +395,11 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.6 point release and later
    #   >  No changes currently needed for EL 9.6 point release
   %endif
-  %if %{kvr} >= 590
-   #  Apply to EL 9.10 point release and later
+  %if %{kvr} >= 611
+   #  Apply to EL 9.7 point release and later
    %{__sed} -i  's/ < KERNEL_VERSION(6, 13, 0)/ < KERNEL_VERSION(5, 14, 0)/g' src/include/linuxver.h
    %{__sed} -i  's/ >= KERNEL_VERSION(6, 14, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i  's/ >= KERNEL_VERSION(6, 17, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
  %endif
 %endif
