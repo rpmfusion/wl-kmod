@@ -421,6 +421,10 @@ pushd %{name}-%{version}-src
    #  Apply to EL 10.0 point release and later
    %{__sed} -i  's/ < KERNEL_VERSION(6, 13, 0)/ < KERNEL_VERSION(6, 12, 0)/g' src/include/linuxver.h
   %endif
+  %if %{kvr} >= 124
+   #  Apply to EL 10.1 point release and later
+   %{__sed} -i  's/ >= KERNEL_VERSION(6, 14, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 popd
