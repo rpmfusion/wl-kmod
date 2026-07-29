@@ -452,7 +452,11 @@ done
 %build
 for kernel_version in %{?kernel_versions}; do
  pushd _kmod_build_${kernel_version%%___*}
+%if 0%{?rhel} >= 10
+ make -C ${kernel_version##*___} M=`pwd` objtool=/usr/bin/true modules
+%else
  make -C ${kernel_version##*___} M=`pwd` modules
+%endif
  popd
 done
 
