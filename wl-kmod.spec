@@ -408,6 +408,10 @@ pushd %{name}-%{version}-src
    %{__sed} -i  's/ >= KERNEL_VERSION(6, 14, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
    %{__sed} -i  's/ >= KERNEL_VERSION(6, 17, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
+  %if %{kvr} >= 687
+   #  Apply to EL 9.8 point release and later
+   #   >  No changes currently needed for EL 9.8 point release
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 10
@@ -432,6 +436,10 @@ pushd %{name}-%{version}-src
   %if %{kvr} >= 124
    #  Apply to EL 10.1 point release and later
    %{__sed} -i  's/ >= KERNEL_VERSION(6, 14, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
+  %if %{kvr} >= 211
+   #  Apply to EL 10.2 point release and later
+   %{__sed} -i  's/ >= KERNEL_VERSION(6, 17, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
  %endif
 %endif
