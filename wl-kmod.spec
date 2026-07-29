@@ -16,7 +16,7 @@
 
 Name:       wl-kmod
 Version:    6.30.223.271
-Release:    62%{?dist}
+Release:    63%{?dist}
 Summary:    Kernel module for Broadcom wireless devices
 Group:      System Environment/Kernel
 License:    Redistributable, no modification permitted
@@ -473,6 +473,16 @@ chmod 0755 $RPM_BUILD_ROOT%{kmodinstdir_prefix}*%{kmodinstdir_postfix}/* || :
 %{?akmod_install}
 
 %changelog
+* Tue Jul 28 2026 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-63
+- Add patch for kernel >= 7.2
+- Add last kernel version release for RHEL 9.x and 10.x and adapt manual
+  patching in SPEC file for last RHEL 10.x kernel
+- Remove objtool checking for RHEL >= 10.x to allow building wl module
+- Important warning for RHEL 10.X: completely removed objtool checking to allow
+  building wl module for RHEL >= 10.x. This results in not detecting potential
+  illegal call or jump in the binary object file provided by Broadcom in the
+  sources tree of this wl module in 2014 - Use it at your own risk.
+
 * Wed May 13 2026 Nicolas Viéville <nicolas.vieville@uphf.fr> - 6.30.223.271-62
 - Add patch for kernel >= 7.1
 - Remove flush_scheduled_work call - not recommended since kernel 6.13
