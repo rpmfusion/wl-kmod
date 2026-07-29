@@ -61,6 +61,7 @@ Patch33:    wl-kmod-034_kernel_6.15_adaptation_replace_del_timer_with_timer_dele
 Patch34:    wl-kmod-035_kernel_6.17_adaptation_fix_functions_prototypes.patch
 Patch35:    wl-kmod-036_kernel_7.1_adaptation_replace_net_device_struct_with_wireless_dev_struct.patch
 Patch36:    wl-kmod-037_kernel_6.13_remove_flush_scheduled_work.patch
+Patch37:    wl-kmod-038_kernel_7.2_adaptation_remove_strncpy_function.patch
 
 # needed for plague to make sure it builds for i586 and i686
 ExclusiveArch:  i686 x86_64
@@ -143,6 +144,7 @@ pushd %{name}-%{version}-src
 %patch -P 34 -p1 -b .kernel_6.17_adaptation
 %patch -P 35 -p1 -b .kernel_7.1_adaptation
 %patch -P 36 -p1 -b .flush_scheduled_work
+%patch -P 37 -p1 -b .kernel_7.2_adaptation
 
 # Manual patching to build for RHEL - inspired by CentOS wl-kmod.spec
 # Actually works for RHEL 6.x and 7.x
