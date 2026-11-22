@@ -412,6 +412,11 @@ pushd %{name}-%{version}-src
    #  Apply to EL 9.8 point release and later
    #   >  No changes currently needed for EL 9.8 point release
   %endif
+  %if %{kvr} >= 741
+   #  Apply to EL 9.9 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(7, 1, 0)/ < KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(7, 1, 0)/ >= KERNEL_VERSION(5, 14, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 %if 0%{?rhel} == 10
