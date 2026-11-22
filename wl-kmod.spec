@@ -446,6 +446,11 @@ pushd %{name}-%{version}-src
    #  Apply to EL 10.2 point release and later
    %{__sed} -i  's/ >= KERNEL_VERSION(6, 17, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
   %endif
+  %if %{kvr} >= 264
+   #  Apply to EL 10.3 point release and later
+   %{__sed} -i  's/ < KERNEL_VERSION(7, 1, 0)/ < KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+   %{__sed} -i 's/ >= KERNEL_VERSION(7, 1, 0)/ >= KERNEL_VERSION(6, 12, 0)/g' src/wl/sys/wl_cfg80211_hybrid.c
+  %endif
  %endif
 %endif
 popd
